@@ -22,12 +22,14 @@ with open('./config/config.toml', 'rb') as f:
 
 
 size = 600, 400
-toplevel_size = 400, 350
+toplevel_size = 430, 350
 root = maliang.Tk(size=size)
 cv = maliang.Canvas(root, auto_zoom=True)
 cv.place(width=600, height=400)
 root.center()
 root.title("电教工具箱")
+if ExperienceTheFeatures:
+    root.title("EECT - 已启用体验功能")
 
 
 # TODO: 这他妈写的太乱了，记得找个时间重构
@@ -152,12 +154,16 @@ def taskbar():
     taskbar_window = maliang.Toplevel(root, size=toplevel_size)
     taskbar_window.center()
     taskbar_window_cv = maliang.Canvas(taskbar_window, auto_zoom=False)
-    taskbar_window_cv.place(width=400, height=350)
+    taskbar_window_cv.place(width=450, height=350)
     taskbar_window.title("电教工具箱 - 设置任务栏")
     theme.customize_window(taskbar_window, disable_maximize_button=True, disable_minimize_button=True)
 
     show_seconds = maliang.Button(taskbar_window_cv, (10, 20), text='在任务栏上显示秒', command=lambda: reg.show_seconds_in_system_clock(1))
     hide_seconds = maliang.Button(taskbar_window_cv, (200, 20), text='在任务栏上隐藏秒', command=lambda: reg.show_seconds_in_system_clock(0))
+
+    if ExperienceTheFeatures:
+        show_weekday = maliang.Button(taskbar_window_cv, (10, 70), text='在任务栏上显示星期`', command=lambda: reg.show_weekday_in_taskbar(1))
+        hide_weekday = maliang.Button(taskbar_window_cv, (220, 70), text='在任务栏上隐藏星期`', command=lambda: reg.show_weekday_in_taskbar(0))
 
     restart_explorer = maliang.Button(taskbar_window_cv, (10, 300), text='重启资源管理器', command=lambda: os.system("taskkill /f /im explorer.exe & start explorer.exe"))
 
@@ -170,7 +176,7 @@ home_button6 = maliang.Button(cv, (180, 160), text="设置任务栏", command=ta
 
 if ExperienceTheFeatures:
     software_recommenddations_text = maliang.Text(cv, (20, 220), text="其他 ∨", fontsize=16)
-    home_button4 = maliang.Button(cv, (20, 260), text="软件推荐", command=software_recommendations_toplevel)
+    home_button4 = maliang.Button(cv, (20, 260), text="软件推荐`", command=software_recommendations_toplevel)
 
 home_button5 = maliang.Button(cv, (20, 355), text="    关于    ", command=About)
 
