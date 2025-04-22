@@ -2,10 +2,22 @@
 import maliang
 import os
 import datetime
+import tomllib
 
 # 自制模块
 import shutdown
 import FindGames
+import about
+
+
+# 读取配置文件
+with open('./config/config.toml', 'rb') as f:
+    config = tomllib.load(f)
+    try:
+        ExperienceTheFeatures = config['ExperienceTheFeatures']
+    except KeyError:
+        ExperienceTheFeatures = False
+
 
 size = 600, 400
 toplevel_size = 400, 350
@@ -15,6 +27,23 @@ cv.place(width=600, height=400)
 root.center()
 root.title("电教工具箱")
 
+
+# TODO: 这他妈写的太乱了，记得找个时间重构
+
+
+def About():
+    About = maliang.Toplevel(root, size=(800, 600))
+    About.center()
+    About_cv = maliang.Canvas(About, auto_zoom=False)
+    About_cv.place(width=800, height=600)
+    About.title("关于电教工具箱")
+    About_title = maliang.Text(About_cv, (140, 20), text="电教工具箱——面向不太会使用电脑的电教委的小工具")
+    About_text = maliang.Text(About_cv, (20, 100), text="Version：1.0(250401)")
+    List_of_developers = maliang.Button(About_cv, (20, 250), text="  开 发 人 员 名 单  ", command=lambda: about.list_of_developers(About))
+    thanks = maliang.Button(About_cv, (230, 250), text="          鸣 谢           ", command=lambda: about.thanks(About))
+    open_source_license = maliang.Button(About_cv, (440, 250), text=" 开 放 源 代 码 许 可 ", command=lambda: about.open_source_license(About))
+
+    c = maliang.Label(About_cv, (20, 530), text="Copyright © 2025 EECT Team, All Rights Reserved.\nEECT开发团队 版权所有，保留所有权利。", fontsize=12)
 
 def auto_shutdown():
     auto_shutdown_window = maliang.Toplevel(root, size=(400, 250))
@@ -101,6 +130,7 @@ def find_games_toplevel():
     find_games_text = maliang.Text(find_games_window_cv, (20, 20), text="在以下分区查找游戏【如：D（D盘）】：", fontsize=18)
     find_games_entry = maliang.InputBox(find_games_window_cv, (20, 60), (90, 40))
     find_games_button = maliang.Button(find_games_window_cv, (150, 60), text="查找", command=lambda: find_games_window_def(find_games_entry.get()))
+    find_games_label = maliang.Label(find_games_window_cv, (65, 260), text="注意：\n查找结果仅供参考，并非100%准确！\n如果找出游戏，请前往对应目录检查。", fontsize=14)
 
 
 
@@ -116,8 +146,12 @@ home_button1 = maliang.Button(cv, (20, 60), text="定时关机", command=auto_sh
 home_button2 = maliang.Button(cv, (130, 60), text="查找电脑上的游戏", command=find_games_toplevel)
 windows_tools_text = maliang.Text(cv, (20, 120), text="Windows工具 ∨", fontsize=16)
 home_button3 = maliang.Button(cv, (20, 160), text="Windows工具", command=Windows_tools_toplevel)
-software_recommenddations_text = maliang.Text(cv, (20, 220), text="其他 ∨", fontsize=16)
-home_button4 = maliang.Button(cv, (20, 260), text="软件推荐", command=software_recommendations_toplevel)
+
+if ExperienceTheFeatures:
+    software_recommenddations_text = maliang.Text(cv, (20, 220), text="其他 ∨", fontsize=16)
+    home_button4 = maliang.Button(cv, (20, 260), text="软件推荐", command=software_recommendations_toplevel)
+
+home_button5 = maliang.Button(cv, (20, 355), text="    关于    ", command=About)
 
 
 root.mainloop()
