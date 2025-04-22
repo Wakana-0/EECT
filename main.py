@@ -1,5 +1,6 @@
 
 import maliang
+from maliang import theme
 import os
 import datetime
 import tomllib
@@ -8,6 +9,7 @@ import tomllib
 import shutdown
 import FindGames
 import about
+import reg
 
 
 # 读取配置文件
@@ -37,6 +39,7 @@ def About():
     About_cv = maliang.Canvas(About, auto_zoom=False)
     About_cv.place(width=800, height=600)
     About.title("关于电教工具箱")
+    theme.customize_window(About, disable_maximize_button=True, disable_minimize_button=True)
     About_title = maliang.Text(About_cv, (140, 20), text="电教工具箱——面向不太会使用电脑的电教委的小工具")
     About_text = maliang.Text(About_cv, (20, 100), text="Version：1.0(250401)")
     List_of_developers = maliang.Button(About_cv, (20, 250), text="  开 发 人 员 名 单  ", command=lambda: about.list_of_developers(About))
@@ -51,6 +54,7 @@ def auto_shutdown():
     auto_shutdown_window_cv = maliang.Canvas(auto_shutdown_window, auto_zoom=False)
     auto_shutdown_window_cv.place(width=400, height=300)
     auto_shutdown_window.title("电教工具箱 - 设置定时关机")
+    theme.customize_window(auto_shutdown_window, disable_maximize_button=True, disable_minimize_button=True)
 
     # 创建文本框和按钮
     shutdown_time_entry = maliang.InputBox(auto_shutdown_window_cv, (50, 20), (90, 40))
@@ -74,6 +78,7 @@ def Windows_tools_toplevel():
     windows_tools_window_cv = maliang.Canvas(windows_tools_window, auto_zoom=False)
     windows_tools_window_cv.place(width=400, height=350)
     windows_tools_window.title("电教工具箱 - Windows工具")
+    theme.customize_window(windows_tools_window, disable_maximize_button=True, disable_minimize_button=True)
 
     warning = maliang.Label(windows_tools_window_cv, (10, 20), fontsize=12, text="tips: 带有*的工具务必在专业指导下使用！")
     windows_reg = maliang.Button(windows_tools_window_cv, (10, 70), text='*注册表编辑器', command=lambda: os.system("start regedit"))
@@ -91,6 +96,7 @@ def find_games_toplevel():
     find_games_window_cv = maliang.Canvas(find_games_window, auto_zoom=False)
     find_games_window_cv.place(width=400, height=350)
     find_games_window.title("电教工具箱 - 查找电脑上的游戏")
+    theme.customize_window(find_games_window, disable_maximize_button=True, disable_minimize_button=True)
 
     def find_games_window_def(root):
         find_games_windows = maliang.Toplevel(find_games_window, size=(250, 70), title="正在查找……")
@@ -133,19 +139,34 @@ def find_games_toplevel():
     find_games_label = maliang.Label(find_games_window_cv, (65, 260), text="注意：\n查找结果仅供参考，并非100%准确！\n如果找出游戏，请前往对应目录检查。", fontsize=14)
 
 
-
 def software_recommendations_toplevel():
     software_recommenddations_window = maliang.Toplevel(root, size=toplevel_size)
     software_recommenddations_window.center()
     software_recommenddations_window_cv = maliang.Canvas(software_recommenddations_window, auto_zoom=False)
     software_recommenddations_window_cv.place(width=400, height=350)
     software_recommenddations_window.title("电教工具箱 - 软件推荐")
+    theme.customize_window(software_recommenddations_window, disable_maximize_button=True, disable_minimize_button=True)
+
+
+def taskbar():
+    taskbar_window = maliang.Toplevel(root, size=toplevel_size)
+    taskbar_window.center()
+    taskbar_window_cv = maliang.Canvas(taskbar_window, auto_zoom=False)
+    taskbar_window_cv.place(width=400, height=350)
+    taskbar_window.title("电教工具箱 - 设置任务栏")
+    theme.customize_window(taskbar_window, disable_maximize_button=True, disable_minimize_button=True)
+
+    show_seconds = maliang.Button(taskbar_window_cv, (10, 20), text='在任务栏上显示秒', command=lambda: reg.show_seconds_in_system_clock(1))
+    hide_seconds = maliang.Button(taskbar_window_cv, (200, 20), text='在任务栏上隐藏秒', command=lambda: reg.show_seconds_in_system_clock(0))
+
+    restart_explorer = maliang.Button(taskbar_window_cv, (10, 300), text='重启资源管理器', command=lambda: os.system("taskkill /f /im explorer.exe & start explorer.exe"))
 
 home_text = maliang.Text(cv, (20, 20), text="“实用”小工具", fontsize=16)
 home_button1 = maliang.Button(cv, (20, 60), text="定时关机", command=auto_shutdown)
 home_button2 = maliang.Button(cv, (130, 60), text="查找电脑上的游戏", command=find_games_toplevel)
 windows_tools_text = maliang.Text(cv, (20, 120), text="Windows工具 ∨", fontsize=16)
 home_button3 = maliang.Button(cv, (20, 160), text="Windows工具", command=Windows_tools_toplevel)
+home_button6 = maliang.Button(cv, (180, 160), text="设置任务栏", command=taskbar)
 
 if ExperienceTheFeatures:
     software_recommenddations_text = maliang.Text(cv, (20, 220), text="其他 ∨", fontsize=16)
