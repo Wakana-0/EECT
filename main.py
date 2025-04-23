@@ -161,9 +161,10 @@ def taskbar():
     show_seconds = maliang.Button(taskbar_window_cv, (10, 20), text='在任务栏上显示秒', command=lambda: reg.show_seconds_in_system_clock(1))
     hide_seconds = maliang.Button(taskbar_window_cv, (200, 20), text='在任务栏上隐藏秒', command=lambda: reg.show_seconds_in_system_clock(0))
 
-    if ExperienceTheFeatures:
-        show_weekday = maliang.Button(taskbar_window_cv, (10, 70), text='在任务栏上显示星期`', command=lambda: reg.show_weekday_in_taskbar(1))
-        hide_weekday = maliang.Button(taskbar_window_cv, (220, 70), text='在任务栏上隐藏星期`', command=lambda: reg.show_weekday_in_taskbar(0))
+    show_weekday = maliang.Button(taskbar_window_cv, (10, 70), text='在任务栏上显示星期`', command=lambda: reg.show_weekday_in_taskbar(1))
+    hide_weekday = maliang.Button(taskbar_window_cv, (220, 70), text='在任务栏上隐藏星期`', command=lambda: reg.show_weekday_in_taskbar(0))
+
+    tips = maliang.Label(taskbar_window_cv, (10, 250), text="带`的功能有点问题，请谨慎使用。")
 
     restart_explorer = maliang.Button(taskbar_window_cv, (10, 300), text='重启资源管理器', command=lambda: os.system("taskkill /f /im explorer.exe & start explorer.exe"))
 
