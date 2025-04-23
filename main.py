@@ -28,6 +28,7 @@ cv = maliang.Canvas(root, auto_zoom=True)
 cv.place(width=600, height=400)
 root.center()
 root.title("电教工具箱")
+root.resizable(False, False)
 if ExperienceTheFeatures:
     root.title("EECT - 已启用体验功能")
 
@@ -80,6 +81,7 @@ def Windows_tools_toplevel():
     windows_tools_window_cv = maliang.Canvas(windows_tools_window, auto_zoom=False)
     windows_tools_window_cv.place(width=400, height=350)
     windows_tools_window.title("电教工具箱 - Windows工具")
+    windows_tools_window.resizable(False, False)
     theme.customize_window(windows_tools_window, disable_maximize_button=True, disable_minimize_button=True)
 
     warning = maliang.Label(windows_tools_window_cv, (10, 20), fontsize=12, text="tips: 带有*的工具务必在专业指导下使用！")
@@ -98,7 +100,9 @@ def find_games_toplevel():
     find_games_window_cv = maliang.Canvas(find_games_window, auto_zoom=False)
     find_games_window_cv.place(width=400, height=350)
     find_games_window.title("电教工具箱 - 查找电脑上的游戏")
+    find_games_window.resizable(False, False)
     theme.customize_window(find_games_window, disable_maximize_button=True, disable_minimize_button=True)
+
 
     def find_games_window_def(root):
         find_games_windows = maliang.Toplevel(find_games_window, size=(250, 70), title="正在查找……")
@@ -147,6 +151,7 @@ def software_recommendations_toplevel():
     software_recommenddations_window_cv = maliang.Canvas(software_recommenddations_window, auto_zoom=False)
     software_recommenddations_window_cv.place(width=400, height=350)
     software_recommenddations_window.title("电教工具箱 - 软件推荐")
+    software_recommenddations_window.resizable(False, False)
     theme.customize_window(software_recommenddations_window, disable_maximize_button=True, disable_minimize_button=True)
 
 
@@ -156,6 +161,7 @@ def taskbar():
     taskbar_window_cv = maliang.Canvas(taskbar_window, auto_zoom=False)
     taskbar_window_cv.place(width=450, height=350)
     taskbar_window.title("电教工具箱 - 设置任务栏")
+    taskbar_window.resizable(False, False)
     theme.customize_window(taskbar_window, disable_maximize_button=True, disable_minimize_button=True)
 
     show_seconds = maliang.Button(taskbar_window_cv, (10, 20), text='在任务栏上显示秒', command=lambda: reg.show_seconds_in_system_clock(1))
