@@ -1,6 +1,8 @@
 import winreg
 
 
+# TODO:他奶奶的，快把任务栏星期做完！
+
 def show_seconds_in_system_clock(value):    # 在任务栏上的时间显示秒
     try:
         # 打开注册表项
