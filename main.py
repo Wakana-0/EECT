@@ -1,15 +1,18 @@
 
 import maliang
 from maliang import theme
+from tkinter import messagebox
 import os
 import datetime
 import tomllib
+import webbrowser
 
 # 自制模块
 import shutdown
 import FindGames
 import about
 import reg
+import settings
 
 
 # 读取配置文件
@@ -17,6 +20,8 @@ with open('./config/config.toml', 'rb') as f:
     config = tomllib.load(f)
     try:
         ExperienceTheFeatures = config['ExperienceTheFeatures']
+        Cache = config['Cache']
+        UseRegistry = config['UseRegistry']
     except KeyError:
         ExperienceTheFeatures = False
 
@@ -48,6 +53,9 @@ def About():
     List_of_developers = maliang.Button(About_cv, (20, 250), text="  开 发 人 员 名 单  ", command=lambda: about.list_of_developers(About))
     thanks = maliang.Button(About_cv, (230, 250), text="          鸣 谢           ", command=lambda: about.thanks(About))
     open_source_license = maliang.Button(About_cv, (440, 250), text=" 开 放 源 代 码 许 可 ", command=lambda: about.open_source_license(About))
+    free_software_statement = maliang.Button(About_cv, (20, 350), text="     免 费 软 件 声 明     ", command=lambda: about.free_software_statement(About))
+    go_github = maliang.Button(About_cv, (20, 300), text="            前 往 此 项 目 仓 库            ", command=lambda: webbrowser.open_new("https://github.com/EECT/EECT"))
+    issues = maliang.Button(About_cv, (385, 300), text="            问 题 反 馈            ", command=lambda: webbrowser.open_new("https://github.com/EECT/EECT/issues"))
 
     c = maliang.Label(About_cv, (20, 530), text="Copyright © 2025 EECT Team, All Rights Reserved.\nEECT开发团队 版权所有，保留所有权利。", fontsize=12)
 
@@ -116,6 +124,14 @@ def find_games_toplevel():
 
         data = FindGames.find_games(root)
 
+        if not Cache:
+            finding_text.destroy()
+            find_spinner = maliang.Spinner(find_games_windows_cv, (10, 15), mode="indeterminate")
+            finding_text = maliang.Text(find_games_windows_cv, (55, 10), text=f"扫描失败\n当前配置不允许使用缓存。\n因为 Cache={Cache}", fontsize=14)
+            messagebox.showerror("功能被锁定", "当前配置不允许使用缓存相关功能。")
+            find_games_windows.topmost(True)
+            return
+
         # 获取当前时间
         current_time = datetime.datetime.now().strftime("%Y-%m-%d %H_%M_%S")
 
@@ -156,6 +172,10 @@ def software_recommendations_toplevel():
 
 
 def taskbar():
+    if not UseRegistry:
+        messagebox.showerror("功能被锁定", "当前配置不允许使用注册表相关功能。")
+        return
+
     taskbar_window = maliang.Toplevel(root, size=toplevel_size)
     taskbar_window.center()
     taskbar_window_cv = maliang.Canvas(taskbar_window, auto_zoom=False)
@@ -186,6 +206,7 @@ if ExperienceTheFeatures:
     home_button4 = maliang.Button(cv, (20, 260), text="软件推荐`", command=software_recommendations_toplevel)
 
 home_button5 = maliang.Button(cv, (20, 355), text="    关于    ", command=About)
+seetings_button = maliang.Button(cv, (130, 355), text="设置", command=lambda: settings.settingsGUI(root))
 
 
 root.mainloop()

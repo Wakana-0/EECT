@@ -57,9 +57,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.""", fontsize=12)
 
 
+def free_software_statement(window):
+    free_software_window = maliang.Toplevel(window, size=(400, 350))
+    free_software_window.center()
+    free_software_window_cv = maliang.Canvas(free_software_window, auto_zoom=False)
+    free_software_window_cv.place(width=400, height=350)
+    free_software_window.title("声明")
+    free_software_window.resizable(False, False)
+
+    free_software_text = maliang.Text(free_software_window_cv, (20, 20), text="""感谢您选择电教工具箱 (EECT)，为了保护您的合法
+权益，您需要仔细阅读此声明，避免受到诈骗、盗版软
+件的侵害。
+
+本软件禁止任何形式的商业倒卖，包括但不限于：
+未经允许直接出售本软件或修改版本，以及源代码；
+捆绑销售、预装收费；以“服务费”“授权费”等名义
+变相收费。
+
+如果您发现此类情况，请及时向EECT团队反馈；如果
+您已经购买，请立即退款。""", fontsize=14)
+
+    open_source_license_button = maliang.Button(free_software_window_cv, (20, 260), text="开放源代码许可", command=lambda: open_source_license(free_software_window))
+    go_github = maliang.Button(free_software_window_cv, (210, 260), text="前往项目仓库", command=lambda: webbrowser.open_new("https://github.com/EECT/EECT"))
+
+
 if __name__ == "__main__":
     root = maliang.Tk()
     thanks(root)
     list_of_developers(root)
     open_source_license(root)
+    free_software_statement(root)
     root.mainloop()
