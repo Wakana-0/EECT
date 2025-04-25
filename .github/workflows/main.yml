@@ -19,4 +19,4 @@ jobs:
           python_ver: '3.11'
           spec: 'main.py'
           upload_exe_with_name: '电教工具箱-'
-          options: --onefile, --name "EECT", --windowed, 
+          options: --name "EECT", --windowed, 
