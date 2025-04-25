@@ -162,13 +162,13 @@ def find_games_toplevel():
 
 
 def software_recommendations_toplevel():
-    software_recommenddations_window = maliang.Toplevel(root, size=toplevel_size)
-    software_recommenddations_window.center()
-    software_recommenddations_window_cv = maliang.Canvas(software_recommenddations_window, auto_zoom=False)
-    software_recommenddations_window_cv.place(width=400, height=350)
-    software_recommenddations_window.title("电教工具箱 - 软件推荐")
-    software_recommenddations_window.resizable(False, False)
-    theme.customize_window(software_recommenddations_window, disable_maximize_button=True, disable_minimize_button=True)
+    software_recommendations_window = maliang.Toplevel(root, size=toplevel_size)
+    software_recommendations_window.center()
+    software_recommendations_window_cv = maliang.Canvas(software_recommendations_window, auto_zoom=False)
+    software_recommendations_window_cv.place(width=400, height=350)
+    software_recommendations_window.title("电教工具箱 - 软件推荐")
+    software_recommendations_window.resizable(False, False)
+    theme.customize_window(software_recommendations_window, disable_maximize_button=True, disable_minimize_button=True)
 
 
 def taskbar():
@@ -187,12 +187,13 @@ def taskbar():
     show_seconds = maliang.Button(taskbar_window_cv, (10, 20), text='在任务栏上显示秒', command=lambda: reg.show_seconds_in_system_clock(1))
     hide_seconds = maliang.Button(taskbar_window_cv, (200, 20), text='在任务栏上隐藏秒', command=lambda: reg.show_seconds_in_system_clock(0))
 
-    show_weekday = maliang.Button(taskbar_window_cv, (10, 70), text='在任务栏上显示星期`', command=lambda: reg.show_weekday_in_taskbar(1))
-    hide_weekday = maliang.Button(taskbar_window_cv, (220, 70), text='在任务栏上隐藏星期`', command=lambda: reg.show_weekday_in_taskbar(0))
+    show_weekday = maliang.Button(taskbar_window_cv, (10, 70), text='`在任务栏上显示星期', command=lambda: reg.show_weekday_in_taskbar(1))
+    hide_weekday = maliang.Button(taskbar_window_cv, (220, 70), text='`在任务栏上隐藏星期', command=lambda: reg.show_weekday_in_taskbar(0))
 
     tips = maliang.Label(taskbar_window_cv, (10, 250), text="带`的功能有点问题，请谨慎使用。")
 
     restart_explorer = maliang.Button(taskbar_window_cv, (10, 300), text='重启资源管理器', command=lambda: os.system("taskkill /f /im explorer.exe & start explorer.exe"))
+
 
 home_text = maliang.Text(cv, (20, 20), text="“实用”小工具", fontsize=16)
 home_button1 = maliang.Button(cv, (20, 60), text="定时关机", command=auto_shutdown)
@@ -202,11 +203,11 @@ home_button3 = maliang.Button(cv, (20, 160), text="Windows工具", command=Windo
 home_button6 = maliang.Button(cv, (180, 160), text="设置任务栏", command=taskbar)
 
 if ExperienceTheFeatures:
-    software_recommenddations_text = maliang.Text(cv, (20, 220), text="其他 ∨", fontsize=16)
+    software_recommendations_text = maliang.Text(cv, (20, 220), text="其他 ∨", fontsize=16)
     home_button4 = maliang.Button(cv, (20, 260), text="软件推荐`", command=software_recommendations_toplevel)
 
 home_button5 = maliang.Button(cv, (20, 355), text="    关于    ", command=About)
-seetings_button = maliang.Button(cv, (130, 355), text="设置", command=lambda: settings.settingsGUI(root))
+settings_button = maliang.Button(cv, (130, 355), text="设置", command=lambda: settings.settingsGUI(root))
 
 
 root.mainloop()
