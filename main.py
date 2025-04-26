@@ -25,6 +25,12 @@ with open('./config/config.toml', 'rb') as f:
     except KeyError:
         ExperienceTheFeatures = False
 
+with open('./config/version.toml', 'rb') as f:
+    version = tomllib.load(f)
+
+    current_version = version['version']
+    current_version_code = version['version_code']
+
 
 size = 600, 400
 toplevel_size = 430, 350
@@ -49,13 +55,14 @@ def About():
     About.title("关于电教工具箱")
     theme.customize_window(About, disable_maximize_button=True, disable_minimize_button=True)
     About_title = maliang.Text(About_cv, (140, 20), text="电教工具箱——面向不太会使用电脑的电教委的小工具")
-    About_text = maliang.Text(About_cv, (20, 100), text="Version：1.0(250401)")
+    About_text = maliang.Text(About_cv, (20, 100), text=f"Version：{current_version} ({current_version_code})")
     List_of_developers = maliang.Button(About_cv, (20, 250), text="  开 发 人 员 名 单  ", command=lambda: about.list_of_developers(About))
     thanks = maliang.Button(About_cv, (230, 250), text="          鸣 谢           ", command=lambda: about.thanks(About))
     open_source_license = maliang.Button(About_cv, (440, 250), text=" 开 放 源 代 码 许 可 ", command=lambda: about.open_source_license(About))
     free_software_statement = maliang.Button(About_cv, (20, 350), text="     免 费 软 件 声 明     ", command=lambda: about.free_software_statement(About))
     go_github = maliang.Button(About_cv, (20, 300), text="            前 往 此 项 目 仓 库            ", command=lambda: webbrowser.open_new("https://github.com/EECT/EECT"))
     issues = maliang.Button(About_cv, (385, 300), text="            问 题 反 馈            ", command=lambda: webbrowser.open_new("https://github.com/EECT/EECT/issues"))
+    update = maliang.Button(About_cv, (400, 97), text="检查更新", command=lambda: about.update_window(About))
 
     c = maliang.Label(About_cv, (20, 530), text="Copyright © 2025 EECT Team, All Rights Reserved.\nEECT开发团队 版权所有，保留所有权利。", fontsize=12)
 

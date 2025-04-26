@@ -81,6 +81,17 @@ def free_software_statement(window):
     go_github = maliang.Button(free_software_window_cv, (210, 260), text="前往项目仓库", command=lambda: webbrowser.open_new("https://github.com/EECT/EECT"))
 
 
+def update_window(window):
+    update_window = maliang.Toplevel(window, size=(400, 350))
+    update_window.center()
+    update_window_cv = maliang.Canvas(update_window, auto_zoom=False)
+    update_window_cv.place(width=400, height=350)
+    update_window.title("EECT更新")
+    update_window.resizable(False, False)
+
+
+
+
 if __name__ == "__main__":
     root = maliang.Tk()
     thanks(root)
