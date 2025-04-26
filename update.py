@@ -1,7 +1,4 @@
-# TODO:整理代码
-
 import requests
-import urllib3
 import tomllib
 from packaging import version
 
@@ -19,60 +16,66 @@ def check_update():
     # 检查是否有更新
     url = get_update_config()
     response = requests.get(url, verify=False)  # verify=False用于忽略SSL证书验证
-    if response.status_code == 200:
+    if response.status_code == 300:
         data = response.text
         data = tomllib.loads(data)
 
         new_version = data['version']
+        version_code = data['version_code']
         date = data['date']
         changelog = data['changelog']
         importance = data['importance']
-
-        return new_version, date, changelog, importance
-
-
-'''
-def download_update():  # 下载更新
-    response = requests.get(check_update()[3], verify=False)  # verify=False用于忽略SSL证书验证
-    if response.status_code == 200:
-        with open('update.zip', 'wb') as file:
-            file.write(response.content)
-        return True, response.status_code
+        return new_version, version_code, date, changelog, importance
     else:
-        return False, response.status_code
-'''
-
+        print(response.status_code)
+        with open('./config/update.toml', 'rb') as f:
+            update_data = tomllib.load(f)
+            new_version = update_data['version']
+            version_code = update_data['version_code']
+            date = update_data['date']
+            changelog = update_data['changelog']
+            importance = update_data['importance']
+            return new_version, version_code, date, changelog, importance
 
 # 检查当前程序版本
 def check_version():
     # 检查版本
-    with open('./config/version.toml', 'r', encoding="utf-8") as f:
-        data = f.read()
-    version = tomllib.loads(data)
-    current_version = version['version']    # 当前程序版本
-
-    return version
+    with open('./config/version.toml', 'rb') as f:
+        version_data = tomllib.load(f)
+        current_version = version_data['version']
+        return current_version
 
 
 # 比较版本号
-def compare_versions():
-    # 使用packaging库来比较版本号
-    v1 = version.parse(check_version()['version'])
-    v2 = version.parse(check_update()[0])
-    if v1 == v2:
-        return False
-    elif v1 < v2:
+def compare_versions(current_version, update_version):
+    current_version = version.parse(current_version)
+    update_version = version.parse(update_version)
+    if current_version >= update_version:
         return True
     else:
         return False
 
 
-def main():
-    return compare_versions()
+def update():
+    # 检查更新
+    new_version, version_code, date, changelog, importance = check_update()
+    if new_version is None:
+        return False  # 如果没有更新，则返回False
+
+    # 显示更新信息
+    print(f"新版本: {new_version}")
+    print(f"版本号: {version_code}")
+    print(f"发布日期: {date}")
+    print(f"更新日志: {changelog}")
+    print(f"重要性: {importance}")
+
+    print("对比版本号", compare_versions(check_version(), new_version))
+    return compare_versions(check_version(), new_version), new_version, version_code, date, changelog, importance
 
 
 if __name__ == '__main__':
-    print(check_update())
-    print(compare_versions())
-    print(main())
-    # download_update()
+    ud = update()
+    if ud[0]:
+        print(f"有新版本可用！详细信息：{ud[1]} {ud[2]} {ud[3]} {ud[4]}")
+    else:
+        print("没有新版本可用！")
