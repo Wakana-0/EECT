@@ -22,7 +22,7 @@ def list_of_developers(window):
     developers_window.title("开发人员名单")
     developers_window.resizable(False, False)
 
-    developers_text = maliang.Text(developers_window_cv, (20, 20), text="开发者：\n\nLyang1273 - 代码、图标\nWakana-0 - 协助")
+    developers_text = maliang.Text(developers_window_cv, (20, 20), text="开发者：\n\nLyang1273 - 代码、图标\nWakana-0 - 图标")
 
 
 def open_source_license(window):
