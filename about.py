@@ -89,7 +89,7 @@ def update_window(window):
     update_window.title("EECT更新")
     update_window.resizable(False, False)
 
-
+    update_text = maliang.Text(update_window_cv, (20, 20), text="乐")
 
 
 if __name__ == "__main__":
