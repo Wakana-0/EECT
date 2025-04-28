@@ -1,5 +1,6 @@
 import maliang
 import webbrowser
+import update
 
 
 def thanks(window):
@@ -82,14 +83,36 @@ def free_software_statement(window):
 
 
 def update_window(window):
-    update_window = maliang.Toplevel(window, size=(400, 350))
+    new_version, new_version_code, date, changelog, importance = "--", "--", "--", "--", "--"
+
+    update_window = maliang.Toplevel(window, size=(500, 350))
     update_window.center()
     update_window_cv = maliang.Canvas(update_window, auto_zoom=False)
     update_window_cv.place(width=400, height=350)
     update_window.title("EECT更新")
     update_window.resizable(False, False)
 
-    update_text = maliang.Text(update_window_cv, (20, 20), text="乐")
+
+    def pull_up_the_update(update_info, version_info):
+        data = update.update()
+        compare_version = data['compare_ver']
+        new_version = data['version']
+        new_version_code = data['version_code']
+        date = data['date']
+        changelog = data['changelog']
+        importance = data['importance']
+        if compare_version is None:
+            update_info.destroy()
+            update_info = maliang.Text(update_window_cv, (20, 80), text="当前使用的EECT是最新版本", fontsize=14)
+            version_info.destroy()
+            version_info = maliang.Text(update_window_cv, (20, 160), text=f"当前版本：{update.check_version(1)}\n版本码：{update.check_version(0)}", fontsize=14)
+
+
+    update_text = maliang.Text(update_window_cv, (90, 20), text="EECT更新", fontsize=32)
+    update_img = maliang.Image(update_window_cv, (20, 16), image=maliang.PhotoImage(file="./img/EECT_update.png").resize(60, 50))
+    update_info = maliang.Text(update_window_cv, (20, 80), text="点击“检查更新”检查当前使用的EECT是否是最新的", fontsize=14)
+    update_button = maliang.Button(update_window_cv, (20, 120), text="检查更新", command=lambda: print(pull_up_the_update(update_info, version_info)))
+    version_info = maliang.Text(update_window_cv, (20, 160), text=f"当前版本：{update.check_version(1)}\n版本码：{update.check_version(0)}\n\n最新版本：{new_version}\n版本码：{new_version_code}\n发布日期：{date}\n更新日志：{changelog}\n重要程度：{importance}", fontsize=14)
 
 
 if __name__ == "__main__":
