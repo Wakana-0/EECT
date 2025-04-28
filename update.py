@@ -16,7 +16,7 @@ def check_update():
     # 检查是否有更新
     url = get_update_config()
     response = requests.get(url, verify=False)  # verify=False用于忽略SSL证书验证
-    if response.status_code == 300:
+    if response.status_code == 200:
         data = response.text
         data = tomllib.loads(data)
 
