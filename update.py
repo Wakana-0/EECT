@@ -55,9 +55,9 @@ def compare_versions(current_version, update_version):
     current_version = version.parse(current_version)
     update_version = version.parse(update_version)
     if current_version >= update_version:
-        return True
-    else:
         return False
+    else:
+        return True
 
 
 def update():
@@ -79,6 +79,7 @@ def update():
 
 if __name__ == '__main__':
     ud = update()
+    print(ud[0])
     if ud[0]:
         print(f"有新版本可用！详细信息：{ud[1]} {ud[2]} {ud[3]} {ud[4]}")
     else:
