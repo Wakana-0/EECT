@@ -62,7 +62,7 @@ def About():
     free_software_statement = maliang.Button(About_cv, (20, 350), text="     免 费 软 件 声 明     ", command=lambda: about.free_software_statement(About))
     go_github = maliang.Button(About_cv, (20, 300), text="            前 往 此 项 目 仓 库            ", command=lambda: webbrowser.open_new("https://github.com/EECT/EECT"))
     issues = maliang.Button(About_cv, (385, 300), text="            问 题 反 馈            ", command=lambda: webbrowser.open_new("https://github.com/EECT/EECT/issues"))
-    update = maliang.Button(About_cv, (400, 97), text="检查更新", command=lambda: about.update_window(About))
+    update = maliang.Button(About_cv, (400, 97), text="检查更新", command=about.pull_up_the_update)
 
     c = maliang.Label(About_cv, (20, 530), text="Copyright © 2025 EECT Team, All Rights Reserved.\nEECT开发团队 版权所有，保留所有权利。", fontsize=12)
 
