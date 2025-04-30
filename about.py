@@ -5,7 +5,7 @@ from tkinter import messagebox
 
 
 def thanks(window):
-    thanks_window = maliang.Toplevel(window, size=(400, 250))
+    thanks_window = maliang.Toplevel(window, size=(400, 250), icon="./img/EECT_logo.ico")
     thanks_window.center()
     thanks_window_cv = maliang.Canvas(thanks_window, auto_zoom=False)
     thanks_window_cv.place(width=400, height=250)
@@ -17,7 +17,7 @@ def thanks(window):
 
 
 def list_of_developers(window):
-    developers_window = maliang.Toplevel(window, size=(400, 250))
+    developers_window = maliang.Toplevel(window, size=(400, 250), icon="./img/EECT_logo.ico")
     developers_window.center()
     developers_window_cv = maliang.Canvas(developers_window, auto_zoom=False)
     developers_window_cv.place(width=400, height=250)
@@ -28,7 +28,7 @@ def list_of_developers(window):
 
 
 def open_source_license(window):
-    license_window = maliang.Toplevel(window, size=(584, 430))
+    license_window = maliang.Toplevel(window, size=(584, 430), icon="./img/EECT_logo.ico")
     license_window.center()
     license_window_cv = maliang.Canvas(license_window, auto_zoom=False)
     license_window_cv.place(width=584, height=445)
@@ -60,7 +60,7 @@ SOFTWARE.""", fontsize=12)
 
 
 def free_software_statement(window):
-    free_software_window = maliang.Toplevel(window, size=(400, 350))
+    free_software_window = maliang.Toplevel(window, size=(400, 350), icon="./img/EECT_logo.ico")
     free_software_window.center()
     free_software_window_cv = maliang.Canvas(free_software_window, auto_zoom=False)
     free_software_window_cv.place(width=400, height=350)
@@ -91,7 +91,7 @@ def pull_up_the_update():
 def update_window(window):
     new_version, new_version_code, date, changelog, importance = "--", "--", "--", "--", "--"
 
-    update_window = maliang.Toplevel(window, size=(500, 350))
+    update_window = maliang.Toplevel(window, size=(500, 350), icon="./img/EECT_logo.ico")
     update_window.center()
     update_window_cv = maliang.Canvas(update_window, auto_zoom=False)
     update_window_cv.place(width=400, height=350)

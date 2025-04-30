@@ -1,6 +1,6 @@
 # https://github.com/EECT/EECT
 import maliang
-from maliang import theme
+from maliang import theme, toolbox
 from tkinter import messagebox
 import os
 import datetime
@@ -34,7 +34,7 @@ with open('./config/version.toml', 'rb') as f:
 
 size = 600, 400
 toplevel_size = 430, 350
-root = maliang.Tk(size=size)
+root = maliang.Tk(size=size, icon="./img/EECT_logo.ico")
 cv = maliang.Canvas(root, auto_zoom=True)
 cv.place(width=600, height=400)
 root.center()
@@ -48,7 +48,7 @@ if ExperienceTheFeatures:
 
 
 def About():
-    About = maliang.Toplevel(root, size=(800, 600))
+    About = maliang.Toplevel(root, size=(800, 600), icon="./img/EECT_logo.ico")
     About.center()
     About_cv = maliang.Canvas(About, auto_zoom=False)
     About_cv.place(width=800, height=600)
@@ -67,7 +67,7 @@ def About():
     c = maliang.Label(About_cv, (20, 530), text="Copyright © 2025 EECT Team, All Rights Reserved.\nEECT开发团队 版权所有，保留所有权利。", fontsize=12)
 
 def auto_shutdown():
-    auto_shutdown_window = maliang.Toplevel(root, size=(400, 250))
+    auto_shutdown_window = maliang.Toplevel(root, size=(400, 250), icon="./img/EECT_logo.ico")
     auto_shutdown_window.center()
     auto_shutdown_window_cv = maliang.Canvas(auto_shutdown_window, auto_zoom=False)
     auto_shutdown_window_cv.place(width=400, height=300)
@@ -91,7 +91,7 @@ def auto_shutdown():
 
 
 def Windows_tools_toplevel():
-    windows_tools_window = maliang.Toplevel(root, size=toplevel_size)
+    windows_tools_window = maliang.Toplevel(root, size=toplevel_size, icon="./img/EECT_logo.ico")
     windows_tools_window.center()
     windows_tools_window_cv = maliang.Canvas(windows_tools_window, auto_zoom=False)
     windows_tools_window_cv.place(width=400, height=350)
@@ -110,7 +110,7 @@ def Windows_tools_toplevel():
 
 
 def find_games_toplevel():
-    find_games_window = maliang.Toplevel(root, size=toplevel_size)
+    find_games_window = maliang.Toplevel(root, size=toplevel_size, icon="./img/EECT_logo.ico")
     find_games_window.center()
     find_games_window_cv = maliang.Canvas(find_games_window, auto_zoom=False)
     find_games_window_cv.place(width=400, height=350)
@@ -169,7 +169,7 @@ def find_games_toplevel():
 
 
 def software_recommendations_toplevel():
-    software_recommendations_window = maliang.Toplevel(root, size=toplevel_size)
+    software_recommendations_window = maliang.Toplevel(root, size=toplevel_size, icon="./img/EECT_logo.ico")
     software_recommendations_window.center()
     software_recommendations_window_cv = maliang.Canvas(software_recommendations_window, auto_zoom=False)
     software_recommendations_window_cv.place(width=400, height=350)
@@ -183,7 +183,7 @@ def taskbar():
         messagebox.showerror("功能被锁定", "当前配置不允许使用注册表相关功能。")
         return
 
-    taskbar_window = maliang.Toplevel(root, size=toplevel_size)
+    taskbar_window = maliang.Toplevel(root, size=toplevel_size, icon="./img/EECT_logo.ico")
     taskbar_window.center()
     taskbar_window_cv = maliang.Canvas(taskbar_window, auto_zoom=False)
     taskbar_window_cv.place(width=450, height=350)

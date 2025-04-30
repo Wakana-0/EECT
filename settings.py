@@ -48,7 +48,7 @@ UseRegistry = {str(reg_val).lower()}
 
 
 def settingsGUI(window):
-    settings_window = maliang.Toplevel(window, size=(500, 350))
+    settings_window = maliang.Toplevel(window, size=(500, 350), icon="./img/EECT_logo.ico")
     settings_window.center()
     settings_window_cv = maliang.Canvas(settings_window, auto_zoom=False)
     settings_window_cv.place(width=600, height=350)
