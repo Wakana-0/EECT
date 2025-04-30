@@ -10,7 +10,7 @@
 
 
 ## 使用文档
-> 未完工~~~
+[转到使用文档（Wiki）](https://github.com/EECT/EECT/wiki)
 
 ## 安装 & 使用
 
