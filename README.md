@@ -9,9 +9,8 @@
 </p>
 
 
-#### [📦 前往本仓库](https://github.com/EECT/EECT)
-
-</div>
+## 使用文档
+[转到使用文档（Wiki）](https://github.com/EECT/EECT/wiki)
 
 ## 安装 & 使用
 

@@ -1,9 +1,11 @@
 import maliang
 import webbrowser
+import update
+from tkinter import messagebox
 
 
 def thanks(window):
-    thanks_window = maliang.Toplevel(window, size=(400, 250))
+    thanks_window = maliang.Toplevel(window, size=(400, 250), icon="./img/EECT_logo.ico")
     thanks_window.center()
     thanks_window_cv = maliang.Canvas(thanks_window, auto_zoom=False)
     thanks_window_cv.place(width=400, height=250)
@@ -15,7 +17,7 @@ def thanks(window):
 
 
 def list_of_developers(window):
-    developers_window = maliang.Toplevel(window, size=(400, 250))
+    developers_window = maliang.Toplevel(window, size=(400, 250), icon="./img/EECT_logo.ico")
     developers_window.center()
     developers_window_cv = maliang.Canvas(developers_window, auto_zoom=False)
     developers_window_cv.place(width=400, height=250)
@@ -26,7 +28,7 @@ def list_of_developers(window):
 
 
 def open_source_license(window):
-    license_window = maliang.Toplevel(window, size=(584, 430))
+    license_window = maliang.Toplevel(window, size=(584, 430), icon="./img/EECT_logo.ico")
     license_window.center()
     license_window_cv = maliang.Canvas(license_window, auto_zoom=False)
     license_window_cv.place(width=584, height=445)
@@ -58,7 +60,7 @@ SOFTWARE.""", fontsize=12)
 
 
 def free_software_statement(window):
-    free_software_window = maliang.Toplevel(window, size=(400, 350))
+    free_software_window = maliang.Toplevel(window, size=(400, 350), icon="./img/EECT_logo.ico")
     free_software_window.center()
     free_software_window_cv = maliang.Canvas(free_software_window, auto_zoom=False)
     free_software_window_cv.place(width=400, height=350)
@@ -79,6 +81,34 @@ def free_software_statement(window):
 
     open_source_license_button = maliang.Button(free_software_window_cv, (20, 260), text="开放源代码许可", command=lambda: open_source_license(free_software_window))
     go_github = maliang.Button(free_software_window_cv, (210, 260), text="前往项目仓库", command=lambda: webbrowser.open_new("https://github.com/EECT/EECT"))
+
+
+def pull_up_the_update():
+        ud = update.update()
+        if ud[0]:
+            compare = "有可用更新！"
+        else:
+            compare = "当前已是最新版本！"
+        messagebox.showinfo("EECT update", f"{compare}\n\n当前版本：{update.check_version(1)}\n版本码：{update.check_version(0)}              \n\n最新版本：{ud[1]}\n版本码：{ud[2]}\n发布日期：{ud[3]}\n更新日志：{ud[4]}\n重要程度：{ud[5]}")
+
+
+def update_window(window):
+    new_version, new_version_code, date, changelog, importance = "--", "--", "--", "--", "--"
+
+    update_window = maliang.Toplevel(window, size=(500, 350), icon="./img/EECT_logo.ico")
+    update_window.center()
+    update_window_cv = maliang.Canvas(update_window, auto_zoom=False)
+    update_window_cv.place(width=400, height=350)
+    update_window.title("EECT更新")
+    update_window.resizable(False, False)
+    '''这一块暂时不动
+    update_text = maliang.Text(update_window_cv, (90, 20), text="EECT更新", fontsize=32)
+    update_img = maliang.Image(update_window_cv, (20, 16), image=maliang.PhotoImage(file="./img/EECT_update.png").resize(60, 50))
+    update_info = maliang.Text(update_window_cv, (20, 80), text="点击“检查更新”检查当前使用的EECT是否是最新的", fontsize=14)
+    version_info = maliang.Text(update_window_cv, (20, 160), text=f"当前版本：{update.check_version(1)}\n版本码：{update.check_version(0)}\n\n最新版本：{new_version}\n版本码：{new_version_code}\n发布日期：{date}\n更新日志：{changelog}\n重要程度：{importance}", fontsize=14)
+    '''
+
+    update_button = maliang.Button(update_window_cv, (20, 120), text="检查更新", command=pull_up_the_update)
 
 
 if __name__ == "__main__":
