@@ -34,7 +34,7 @@ jobs:
         python -m nuitka --standalone --onefile --windows-icon-from-ico=EECT_icon.png --output-dir=dist main.py
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: EECT-build
         path: dist/main.exe
