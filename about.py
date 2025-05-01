@@ -85,7 +85,11 @@ def free_software_statement(window):
 
 def pull_up_the_update():
         ud = update.update()
-        messagebox.showinfo("EECT update", f"当前版本：{update.check_version(1)}\n版本码：{update.check_version(0)}              \n\n最新版本：{ud[1]}\n版本码：{ud[2]}\n发布日期：{ud[3]}\n更新日志：{ud[4]}\n重要程度：{ud[5]}")
+        if ud[0]:
+            compare = "有可用更新！"
+        else:
+            compare = "当前已是最新版本！"
+        messagebox.showinfo("EECT update", f"{compare}\n\n当前版本：{update.check_version(1)}\n版本码：{update.check_version(0)}              \n\n最新版本：{ud[1]}\n版本码：{ud[2]}\n发布日期：{ud[3]}\n更新日志：{ud[4]}\n重要程度：{ud[5]}")
 
 
 def update_window(window):
@@ -105,6 +109,7 @@ def update_window(window):
     '''
 
     update_button = maliang.Button(update_window_cv, (20, 120), text="检查更新", command=pull_up_the_update)
+
 
 if __name__ == "__main__":
     root = maliang.Tk()
