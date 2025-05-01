@@ -5,7 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch:  # 添加手动触发选项
+  workflow_dispatch:  # Add manual trigger option
     inputs:
       build-type:
         description: 'Build type (Release/Debug)'
@@ -24,17 +24,23 @@ jobs:
       with:
         python-version: '3.11'
 
+    - name: Download and Install Dependency Walker
+      run: |
+        $depends_url = "https://www.dependencywalker.com/depends22_x64.zip"
+        $depends_path = "$env:TEMP\depends.zip"
+        Invoke-WebRequest -Uri $depends_url -OutFile $depends_path
+        Expand-Archive -Path $depends_path -DestinationPath $env:TEMP\depends
+        $depends_exe = Join-Path -Path $env:TEMP\depends -ChildPath "depends.exe"
+        $env:DEPENDENCY_WALKER_PATH = $depends_exe
+
+    - name: Set Environment Variable for Dependency Walker
+      run: echo "DEPENDENCY_WALKER_PATH=$env:DEPENDENCY_WALKER_PATH" >> $env:GITHUB_ENV
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install requests maliang psutil nuitka imageio  # 添加 imageio
+        pip install requests maliang psutil nuitka imageio
 
     - name: Build with Nuitka
       run: |
         python -m nuitka --standalone --onefile --windows-icon-from-ico=EECT_icon.png --output-dir=dist main.py
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: EECT-build
-        path: dist/main.exe
