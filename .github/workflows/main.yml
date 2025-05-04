@@ -41,8 +41,17 @@ jobs:
         python -m nuitka `
           --standalone `
           --onefile `
-          --windows-icon-from-ico=EECT_icon.png `
+          --windows-icon-from-ico=EECT_icon.ico `
           --output-dir=dist `
           --enable-plugin=tk-inter `
-          --accept-downloads `
           main.py
+
+    - name: Compress build output
+      run: |
+        Compress-Archive -Path dist -DestinationPath eect-build.zip
+
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: eect-build-zip
+        path: eect-build.zip
