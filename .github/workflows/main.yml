@@ -5,7 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch:  # Add manual trigger option
+  workflow_dispatch:
     inputs:
       build-type:
         description: 'Build type (Release/Debug)'
@@ -17,24 +17,19 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout source code
+      uses: actions/checkout@v4
 
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
 
-    - name: Download and Install Dependency Walker
-      run: |
-        $depends_url = "https://www.dependencywalker.com/depends22_x64.zip"
-        $depends_path = "$env:TEMP\depends.zip"
-        Invoke-WebRequest -Uri $depends_url -OutFile $depends_path
-        Expand-Archive -Path $depends_path -DestinationPath $env:TEMP\depends
-        $depends_exe = Join-Path -Path $env:TEMP\depends -ChildPath "depends.exe"
-        $env:DEPENDENCY_WALKER_PATH = $depends_exe
-
-    - name: Set Environment Variable for Dependency Walker
-      run: echo "DEPENDENCY_WALKER_PATH=$env:DEPENDENCY_WALKER_PATH" >> $env:GITHUB_ENV
+    - name: Cache Nuitka Dependency Walker
+      uses: actions/cache@v4
+      with:
+        path: C:\Users\runneradmin\AppData\Local\Nuitka\Nuitka\Cache\downloads\depends\x86_64
+        key: nuitka-depends-cache-v1
 
     - name: Install dependencies
       run: |
@@ -43,4 +38,10 @@ jobs:
 
     - name: Build with Nuitka
       run: |
-        python -m nuitka --standalone --onefile --windows-icon-from-ico=EECT_icon.png --output-dir=dist main.py --enable-plugin=tk-inter
+        python -m nuitka ^
+          --standalone ^
+          --onefile ^
+          --windows-icon-from-ico=EECT_icon.png ^
+          --output-dir=dist ^
+          main.py ^
+          --enable-plugin=tk-inter
