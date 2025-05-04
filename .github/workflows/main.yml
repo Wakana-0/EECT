@@ -44,4 +44,5 @@ jobs:
           --windows-icon-from-ico=EECT_icon.png `
           --output-dir=dist `
           --enable-plugin=tk-inter `
+          --accept-downloads `
           main.py
