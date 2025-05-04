@@ -41,16 +41,18 @@ jobs:
         pip install requests maliang psutil nuitka imageio
 
     - name: Build with Nuitka
-      run: |
-        python -m nuitka `
-          --standalone `
-          --onefile `
-          --windows-icon-from-ico=EECT_icon.ico `
-          --output-dir=dist `
-          --enable-plugin=tk-inter `
-          --windows-console-mode=disable `
-          --follow-imports `
-          main.py
+      uses: Nuitka/Nuitka-Action@v1.2
+      with:
+        script-name: main.py
+        mode: standalone
+        onefile: true
+        windows-icon-from-ico: EECT_icon.ico
+        output-dir: dist
+        enable-plugins: tk-inter
+        windows-console-mode: disable
+        follow-imports: true
+      env:
+          NUITKA_DOWNLOAD_DEPENDS: "yes"
 
     - name: Compress build output
       run: |
