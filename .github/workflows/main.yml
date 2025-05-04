@@ -44,22 +44,15 @@ jobs:
       uses: Nuitka/Nuitka-Action@v1.2
       with:
         script-name: main.py
-        mode: standalone
         onefile: true
+        standalone: true
         windows-icon-from-ico: EECT_icon.ico
         output-dir: dist
         enable-plugins: tk-inter
-        windows-console-mode: disable
-        follow-imports: true
-      env:
-          NUITKA_DOWNLOAD_DEPENDS: "yes"
-
-    - name: Compress build output
-      run: |
-        Compress-Archive -Path dist -DestinationPath eect-build.zip
+        disable-console: true
 
     - name: Upload build artifact
       uses: actions/upload-artifact@v4
       with:
-        name: eect-build-zip
-        path: eect-build.zip
+        name: eect-build
+        path: dist\main.exe
