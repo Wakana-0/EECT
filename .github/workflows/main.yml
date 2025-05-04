@@ -38,10 +38,10 @@ jobs:
 
     - name: Build with Nuitka
       run: |
-        python -m nuitka ^
-          --standalone ^
-          --onefile ^
-          --windows-icon-from-ico=EECT_icon.png ^
-          --output-dir=dist ^
-          main.py ^
-          --enable-plugin=tk-inter
+        python -m nuitka `
+          --standalone `
+          --onefile `
+          --windows-icon-from-ico=EECT_icon.png `
+          --output-dir=dist `
+          --enable-plugin=tk-inter `
+          main.py
