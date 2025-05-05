@@ -1,6 +1,6 @@
 # https://github.com/EECT/EECT
 import maliang
-from maliang import theme, toolbox
+from maliang import theme
 from tkinter import messagebox
 import os
 import datetime
@@ -40,7 +40,7 @@ root = maliang.Tk(size=size, icon="./img/EECT_logo.ico")
 cv = maliang.Canvas(root, auto_zoom=True)
 cv.place(width=600, height=400)
 root.center()
-root.title("电教工具箱")
+root.title("EECT")
 root.resizable(False, False)
 if ExperienceTheFeatures:
     root.title("EECT - 已启用体验功能")
@@ -50,30 +50,32 @@ if ExperienceTheFeatures:
 
 
 def About():
-    About = maliang.Toplevel(root, size=(800, 600), icon="./img/EECT_logo.ico")
+    About = maliang.Toplevel(root, size=(500, 480), icon="./img/EECT_logo.ico")
     About.center()
     About_cv = maliang.Canvas(About, auto_zoom=False)
     About_cv.place(width=800, height=600)
-    About.title("关于电教工具箱")
+    About.title("关于EECT")
     theme.customize_window(About, disable_maximize_button=True, disable_minimize_button=True)
-    About_title = maliang.Text(About_cv, (140, 20), text="电教工具箱——面向不太会使用电脑的电教委的小工具")
-    About_text = maliang.Text(About_cv, (20, 100), text=f"Version：{current_version} ({current_version_code})")
-    List_of_developers = maliang.Button(About_cv, (20, 250), text="  开 发 人 员 名 单  ", command=lambda: about.list_of_developers(About))
-    thanks = maliang.Button(About_cv, (230, 250), text="          鸣 谢           ", command=lambda: about.thanks(About))
-    open_source_license = maliang.Button(About_cv, (440, 250), text=" 开 放 源 代 码 许 可 ", command=lambda: about.open_source_license(About))
-    free_software_statement = maliang.Button(About_cv, (20, 350), text="     免 费 软 件 声 明     ", command=lambda: about.free_software_statement(About))
-    go_github = maliang.Button(About_cv, (20, 300), text="            前 往 此 项 目 仓 库            ", command=lambda: webbrowser.open_new("https://github.com/EECT/EECT"))
-    issues = maliang.Button(About_cv, (385, 300), text="            问 题 反 馈            ", command=lambda: webbrowser.open_new("https://github.com/EECT/EECT/issues"))
-    update = maliang.Button(About_cv, (400, 97), text="检查更新", command=about.pull_up_the_update)
+    EECT_logo = maliang.Image(About_cv, (20, 15), image=maliang.PhotoImage(file="./EECT_icon.png").resize(60, 60))
+    About_title = maliang.Text(About_cv, (100, 20), text="EECT", fontsize=40)
+    About_text = maliang.Text(About_cv, (20, 100), text=f"Version：{current_version}\nVersion code：{current_version_code}")
+    update = maliang.IconButton(About_cv, (20, 165), text=" 检查更新", image=maliang.PhotoImage(file="./img/EECT_update.png").resize(34, 28), command=about.pull_up_the_update)
+    List_of_developers = maliang.Button(About_cv, (20, 250), text="  贡 献 者 名 单  ", command=lambda: webbrowser.open_new("https://github.com/EECT/EECT/graphs/contributors"))
+    thanks = maliang.Button(About_cv, (200, 250), text="        鸣 谢         ", command=lambda: about.thanks(About))
+    go_github = maliang.Button(About_cv, (20, 300), text=" 前 往 此 项 目 仓 库 ", command=lambda: webbrowser.open_new("https://github.com/EECT/EECT"))
+    issues = maliang.Button(About_cv, (240, 300), text=" 意 见 反 馈 ", command=lambda: webbrowser.open_new("https://github.com/EECT/EECT/issues"))
+    open_source_license = maliang.Button(About_cv, (20, 350), text=" 开放源代码许可 ", command=lambda: about.open_source_license(About))
+    free_software_statement = maliang.Button(About_cv, (200, 350), text=" 免费软件声明 ", command=lambda: about.free_software_statement(About))
 
-    c = maliang.Label(About_cv, (20, 530), text="Copyright © 2025 EECT Team, All Rights Reserved.\nEECT开发团队 版权所有，保留所有权利。", fontsize=12)
+    c = maliang.Label(About_cv, (20, 430), text="Copyright © 2025 EECT Team, All Rights Reserved.", fontsize=12)
+
 
 def auto_shutdown():
     auto_shutdown_window = maliang.Toplevel(root, size=(400, 250), icon="./img/EECT_logo.ico")
     auto_shutdown_window.center()
     auto_shutdown_window_cv = maliang.Canvas(auto_shutdown_window, auto_zoom=False)
     auto_shutdown_window_cv.place(width=400, height=300)
-    auto_shutdown_window.title("电教工具箱 - 设置定时关机")
+    auto_shutdown_window.title("EECT - 设置定时关机")
     theme.customize_window(auto_shutdown_window, disable_maximize_button=True, disable_minimize_button=True)
 
     # 创建文本框和按钮
@@ -97,7 +99,7 @@ def Windows_tools_toplevel():
     windows_tools_window.center()
     windows_tools_window_cv = maliang.Canvas(windows_tools_window, auto_zoom=False)
     windows_tools_window_cv.place(width=400, height=350)
-    windows_tools_window.title("电教工具箱 - Windows工具")
+    windows_tools_window.title("EECT - Windows工具")
     windows_tools_window.resizable(False, False)
     theme.customize_window(windows_tools_window, disable_maximize_button=True, disable_minimize_button=True)
 
@@ -116,7 +118,7 @@ def find_games_toplevel():
     find_games_window.center()
     find_games_window_cv = maliang.Canvas(find_games_window, auto_zoom=False)
     find_games_window_cv.place(width=400, height=350)
-    find_games_window.title("电教工具箱 - 查找电脑上的游戏")
+    find_games_window.title("EECT - 查找电脑上的游戏")
     find_games_window.resizable(False, False)
     theme.customize_window(find_games_window, disable_maximize_button=True, disable_minimize_button=True)
 
@@ -175,7 +177,7 @@ def software_recommendations_toplevel():
     software_recommendations_window.center()
     software_recommendations_window_cv = maliang.Canvas(software_recommendations_window, auto_zoom=False)
     software_recommendations_window_cv.place(width=400, height=350)
-    software_recommendations_window.title("电教工具箱 - 软件推荐")
+    software_recommendations_window.title("EECT - 软件推荐")
     software_recommendations_window.resizable(False, False)
     theme.customize_window(software_recommendations_window, disable_maximize_button=True, disable_minimize_button=True)
 
@@ -189,7 +191,7 @@ def taskbar():
     taskbar_window.center()
     taskbar_window_cv = maliang.Canvas(taskbar_window, auto_zoom=False)
     taskbar_window_cv.place(width=450, height=350)
-    taskbar_window.title("电教工具箱 - 设置任务栏")
+    taskbar_window.title("EECT - 设置任务栏")
     taskbar_window.resizable(False, False)
     theme.customize_window(taskbar_window, disable_maximize_button=True, disable_minimize_button=True)
 
