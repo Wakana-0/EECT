@@ -48,7 +48,7 @@ jobs:
         windows-icon-from-ico: EECT_icon.ico
         output-dir: dist
         enable-plugins: tk-inter
-        disable-console: false
+        disable-console: true
 
     - name: Upload build artifact
       uses: actions/upload-artifact@v4
