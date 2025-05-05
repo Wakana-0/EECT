@@ -25,15 +25,14 @@ with open('./config/config.toml', 'rb') as f:
     except KeyError as e:
         ExperienceTheFeatures = False
         messagebox.showwarning("配置文件错误", f"读取配置文件时出错\n\n详细信息：{e}")
+
 try:
     with open('./config/version.toml', 'rb') as f:
         version = tomllib.load(f)
-except FileNotFoundError as e:
-    messagebox.showerror("配置文件错误", f"无法获取当前的版本信息\n\n详细信息：{e}")
-
     current_version = version['version']
     current_version_code = version['version_code']
-
+except FileNotFoundError as e:
+    messagebox.showerror("配置文件错误", f"无法获取当前的版本信息\n\n详细信息：{e}")
 
 size = 600, 400
 toplevel_size = 430, 350
