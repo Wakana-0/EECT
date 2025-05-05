@@ -43,7 +43,7 @@ jobs:
       uses: Nuitka/Nuitka-Action@v1.2
       with:
         script-name: main.py
-        onefile: true
+        onefile: false
         standalone: true
         windows-icon-from-ico: EECT_icon.ico
         output-dir: dist
