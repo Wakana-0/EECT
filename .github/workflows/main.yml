@@ -25,6 +25,17 @@ jobs:
       with:
         python-version: '3.11'
 
+    - name: Cache Python dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~\AppData\Local\pip\Cache
+        key: ${{ runner.os }}-python-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('requirements.txt') }}
+
+        restore-keys: |
+          ${{ runner.os }}-python-${{ steps.setup-python.outputs.python-version }}-
+          ${{ runner.os }}-python-
+          ${{ runner.os }}-
+
     - name: Cache Nuitka Dependency Walker
       uses: actions/cache@v4
       with:
@@ -39,19 +50,28 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+
     - name: Build with Nuitka
       uses: Nuitka/Nuitka-Action@v1.2
       with:
         script-name: main.py
-        onefile: true
+        output-file: EECT
+        onefile: false
         standalone: true
         windows-icon-from-ico: EECT_icon.ico
-        output-dir: dist
+        include-data-dir: |
+          img=img
+          config=config
         enable-plugins: tk-inter
-        disable-console: true
+        windows-console-mode: disable
+
+    - name: Zip the build artifact
+      run: |
+        dir '.\build\main.dist\*'
+        Compress-Archive -Path '.\build\main.dist\*' -DestinationPath 'EECT_build-windows-latest.zip' -Force
 
     - name: Upload build artifact
       uses: actions/upload-artifact@v4
       with:
-        name: eect-build
-        path: dist\main.exe
+        name: EECT_build-Windows-latest.zip
+        path: EECT_build-windows-latest.zip
