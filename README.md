@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/480425ee-039f-460b-8bf9-997d424c5dd0)  <h1 align="center">
+<h1 align="center">
   Electrical Education Commission Toolbox
   电教工具箱
 </h1>
