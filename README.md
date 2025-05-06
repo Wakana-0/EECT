@@ -1,4 +1,4 @@
-  <h1 align="center">
+![image](https://github.com/user-attachments/assets/480425ee-039f-460b-8bf9-997d424c5dd0)  <h1 align="center">
   Electrical Education Commission Toolbox
   电教工具箱
 </h1>
@@ -21,9 +21,9 @@
 > **兼容性：** 现支持 Windows 10，对Windwos 8的兼容性需要验证。
 
 推荐配置
-| **🖥操作系统** | **🗄运行内存** | **运行环境** |
+| **🖥操作系统** | **🗄运行内存** | **运行环境（Releases）** |
 | :-----: | :-----: | :------: |
-| **Windows 10** 及以上 | ≥4GB | *无特殊要求* |
+| **Windows 10** 及以上 | ≥4GB | *64位的操作系统，基于x64的处理器* |
 
 若已**满足**，请进行接下来的步骤。
 
