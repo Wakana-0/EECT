@@ -50,22 +50,26 @@ if ExperienceTheFeatures:
 
 
 def About():
-    About = maliang.Toplevel(root, size=(500, 480), icon="./img/EECT_logo.ico")
+    About = maliang.Toplevel(root, size=(650, 480), icon="./img/EECT_logo.ico")
     About.center()
     About_cv = maliang.Canvas(About, auto_zoom=False)
-    About_cv.place(width=500, height=480)
+    About_cv.place(width=500, height=480, x=0, y=0)
+    About_sidebar_cv = maliang.Canvas(About, auto_zoom=False)
+    About_sidebar_cv.place(width=150, height=480, x=500, y=0)
     About.title("关于EECT")
     About.resizable(False, False)
     # EECT_logo = maliang.Image(About_cv, (20, 15), image=maliang.PhotoImage(file="./EECT_icon.png").resize(60, 60))
     About_title = maliang.Text(About_cv, (20, 20), text="EECT", fontsize=40)
     About_text = maliang.Text(About_cv, (20, 100), text=f"Version：{current_version}\nVersion code：{current_version_code}")
     update = maliang.Button(About_cv, (20, 165), text="检查更新", command=about.pull_up_the_update)
-    List_of_developers = maliang.Button(About_cv, (20, 250), text="  贡 献 者 名 单  ", command=lambda: webbrowser.open_new("https://github.com/EECT/EECT/graphs/contributors"))
-    thanks = maliang.Button(About_cv, (200, 250), text="        鸣 谢         ", command=lambda: about.thanks(About))
-    go_github = maliang.Button(About_cv, (20, 300), text=" 前 往 此 项 目 仓 库 ", command=lambda: webbrowser.open_new("https://github.com/EECT/EECT"))
-    issues = maliang.Button(About_cv, (240, 300), text=" 意 见 反 馈 ", command=lambda: webbrowser.open_new("https://github.com/EECT/EECT/issues"))
-    open_source_license = maliang.Button(About_cv, (20, 350), text=" 开放源代码许可 ", command=lambda: about.open_source_license(About))
-    free_software_statement = maliang.Button(About_cv, (200, 350), text=" 免费软件声明 ", command=lambda: about.free_software_statement(About))
+
+    About_sidebar_text = maliang.Text(About_sidebar_cv, (0, 20), text="更多信息∨", fontsize=20)
+    List_of_developers = maliang.UnderlineButton(About_sidebar_cv, (0, 70), text="贡献者名单", fontsize=16, command=lambda: webbrowser.open_new("https://github.com/EECT/EECT/graphs/contributors"))
+    thanks = maliang.UnderlineButton(About_sidebar_cv, (0, 100), text="鸣谢", fontsize=16, command=lambda: about.thanks(About))
+    go_github = maliang.UnderlineButton(About_sidebar_cv, (0, 130), text="前往此项目仓库", fontsize=16, command=lambda: webbrowser.open_new("https://github.com/EECT/EECT"))
+    issues = maliang.UnderlineButton(About_sidebar_cv, (0, 160), text="意见反馈", fontsize=16, command=lambda: webbrowser.open_new("https://github.com/EECT/EECT/issues"))
+    open_source_license = maliang.UnderlineButton(About_sidebar_cv, (0, 190), text="开放源代码许可", fontsize=16, command=lambda: about.open_source_license(About))
+    free_software_statement = maliang.UnderlineButton(About_sidebar_cv, (0, 220), text="免费软件声明", fontsize=16, command=lambda: about.free_software_statement(About))
 
     c = maliang.Label(About_cv, (20, 430), text="Copyright © 2025 EECT Team, All Rights Reserved.", fontsize=12)
 
