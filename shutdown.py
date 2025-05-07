@@ -20,6 +20,8 @@ def cancel():  # 取消关机或重启
 
 
 def set_shutdown_time(entry):
+    time = entry.get()
+    print(type(time))
     try:
         time = int(entry.get())
         if msg(f'确定要关机吗？关机将在{time}秒后执行。'):

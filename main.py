@@ -86,7 +86,7 @@ def auto_shutdown():
     shutdown_time_entry = maliang.InputBox(auto_shutdown_window_cv, (50, 20), (90, 40))
     shutdown_time_entry.insert(0, '60')  # 默认值为60秒
 
-    shutdown_button = maliang.Button(auto_shutdown_window_cv, (150, 20), text='在设定的时间后关机',command=lambda: shutdown.set_shutdown_time(shutdown_time_entry))
+    shutdown_button = maliang.Button(auto_shutdown_window_cv, (150, 20), text='在设定的时间后关机', command=lambda: shutdown.set_shutdown_time(shutdown_time_entry))
 
     restart_time_entry = maliang.InputBox(auto_shutdown_window_cv, (50, 80), (90, 40))
     restart_time_entry.insert(0, '60')  # 默认值为60秒
