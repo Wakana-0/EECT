@@ -48,5 +48,5 @@ def update_settings(cv):
     cv.clear()
     update_title = maliang.Text(cv, (20, 20), text="更新设置")
     update_text = maliang.Text(cv, (20, 80), text="设置EECT的检查更新模式")
-    update_button = maliang.Button(cv, (20, 140), text="检查更新", command=lambda: about.pull_up_the_update())
+
     update_next_button = maliang.Button(cv, (650, 450), text="    下 一 步  ▶ ")
