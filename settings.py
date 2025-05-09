@@ -1,3 +1,5 @@
+from typing import Any
+
 import maliang
 from maliang import theme
 import tomllib
@@ -6,7 +8,7 @@ import os
 config = None
 
 
-def get_config():
+def get_config() -> tuple[any, any, any] | None:
     global config
     try:
         with open('./config/config.toml', 'rb') as f:

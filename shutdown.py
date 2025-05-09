@@ -2,16 +2,16 @@ import os
 from tkinter import messagebox
 
 
-def msg(text):  # 提示框
+def msg(text: str) -> messagebox.askokcancel:  # 提示框
     result = messagebox.askokcancel('注意', text)
     return result
 
 
-def shutdown(time):  # 关机
+def shutdown(time: int):  # 关机
     os.system(f"shutdown /s /t {time}")
 
 
-def restart(time):  # 重启
+def restart(time: int):  # 重启
     os.system(f"shutdown /r /t {time}")
 
 
@@ -19,7 +19,7 @@ def cancel():  # 取消关机或重启
     os.system("shutdown /a")
 
 
-def set_shutdown_time(entry):
+def set_shutdown_time(entry) -> messagebox.askokcancel:
     time = entry.get()
     print(type(time))
     try:
@@ -30,7 +30,7 @@ def set_shutdown_time(entry):
         messagebox.showerror('错误', f'你输入的值不正确\n\n{f}')
 
 
-def set_restart_time(entry):
+def set_restart_time(entry) -> messagebox.askokcancel:
     try:
         time = int(entry.get())
         if msg(f'确定要重启吗？重启将在{time}秒后执行。'):
