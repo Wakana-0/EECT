@@ -2,9 +2,12 @@ import maliang
 import webbrowser
 import update
 from tkinter import messagebox
+from loguru import logger
 
 
 def thanks(window):
+    logger.info("调用 thanks 函数")
+    logger.info("创建 thanks_window 窗口")
     thanks_window = maliang.Toplevel(window, size=(400, 250), icon="./img/EECT_logo.ico")
     thanks_window.center()
     thanks_window_cv = maliang.Canvas(thanks_window, auto_zoom=False)
@@ -17,6 +20,8 @@ def thanks(window):
 
 
 def list_of_developers(window):
+    logger.info("调用 list_of_developers 函数")
+    logger.info("创建 developers_window 窗口")
     developers_window = maliang.Toplevel(window, size=(400, 250), icon="./img/EECT_logo.ico")
     developers_window.center()
     developers_window_cv = maliang.Canvas(developers_window, auto_zoom=False)
@@ -31,6 +36,8 @@ def list_of_developers(window):
 
 
 def open_source_license(window):
+    logger.info("调用 open_source_license 函数")
+    logger.info("创建 license_window 窗口")
     license_window = maliang.Toplevel(window, size=(584, 430), icon="./img/EECT_logo.ico")
     license_window.center()
     license_window_cv = maliang.Canvas(license_window, auto_zoom=False)
@@ -63,6 +70,8 @@ SOFTWARE.""", fontsize=12)
 
 
 def free_software_statement(window):
+    logger.info("调用 free_software_statement 函数")
+    logger.info("创建 free_software_window 窗口")
     free_software_window = maliang.Toplevel(window, size=(400, 350), icon="./img/EECT_logo.ico")
     free_software_window.center()
     free_software_window_cv = maliang.Canvas(free_software_window, auto_zoom=False)
@@ -87,12 +96,15 @@ def free_software_statement(window):
 
 
 def pull_up_the_update():
-        ud = update.update()
-        if ud[0]:
-            compare = "有可用更新！"
-        else:
-            compare = "当前已是最新版本！"
-        messagebox.showinfo("EECT update", f"{compare}\n\n当前版本：{update.check_version(1)}\n版本码：{update.check_version(0)}              \n\n最新版本：{ud[1]}\n版本码：{ud[2]}\n发布日期：{ud[3]}\n更新日志：{ud[4]}\n重要程度：{ud[5]}")
+    logger.info("调用 pull_up_the_update 函数")
+    ud = update.update()
+    if ud[0]:
+        logger.info("检测到新版本")
+        compare = "有可用更新！"
+    else:
+        logger.info("当前已是最新版本")
+        compare = "当前已是最新版本！"
+    messagebox.showinfo("EECT update", f"{compare}\n\n当前版本：{update.check_version(1)}\n版本码：{update.check_version(0)}              \n\n最新版本：{ud[1]}\n版本码：{ud[2]}\n发布日期：{ud[3]}\n更新日志：{ud[4]}\n重要程度：{ud[5]}")
 
 
 def update_window(window):
