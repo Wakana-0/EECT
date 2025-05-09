@@ -33,6 +33,9 @@ try:
     current_version_code = version['version_code']
 except FileNotFoundError as e:
     messagebox.showerror("配置文件错误", f"无法获取当前的版本信息\n\n详细信息：{e}")
+except KeyError as e:
+    messagebox.showerror("配置文件错误", f"读取版本信息时出错\n\n详细信息：{e}")
+    exit(0)
 
 size = 600, 400
 toplevel_size = 430, 350

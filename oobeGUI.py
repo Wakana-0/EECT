@@ -10,6 +10,7 @@ def article(cv):
     open_source_license = maliang.Button(cv, (20, 80), text="开放源代码许可", command=lambda: about.open_source_license(cv))
     free_software_statement = maliang.Button(cv, (20, 140), text="EECT免费软件声明", command=lambda: about.free_software_statement(cv))
     next_button = maliang.Button(cv, (650, 450), text="    下 一 步  ▶ ", command=lambda: initialize(cv))
+    last_button = maliang.Button(cv, (500, 450), text="     退 出     ", command=lambda: exit(0))
 
 
 def initialize(cv):
@@ -17,6 +18,7 @@ def initialize(cv):
     initialize_wait = maliang.Spinner(cv, (20, 20), mode="indeterminate")
     initialize_title = maliang.Text(cv, (70, 20), text="即将开始初始化配置文件，准备好后点击“继续”。")
     initialize_next_button = maliang.Button(cv, (650, 450), text="    继 续  ▶ ", command=lambda: initializing(initialize_title, initialize_next_button))
+    last_button = maliang.Button(cv, (500, 450), text=" ◀  上 一 步    ", command=lambda: article(cv))
 
     def initializing(title, button):
         title.destroy()
@@ -41,6 +43,7 @@ def color(cv):
     cv.clear()
     color_title = maliang.Text(cv, (20, 20), text="选择颜色模式")
     color_mode = maliang.SegmentedButton(cv, (20, 80), text=("跟随系统", "深色", "浅色"), default=0)
+    apply = maliang.Button(cv, (280, 85), text="    应 用    ", command=lambda: EECT_oobe.set_color(color_mode.get()))
     color_next_button = maliang.Button(cv, (650, 450), text="    下 一 步  ▶ ")
 
 

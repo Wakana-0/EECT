@@ -1,4 +1,5 @@
 import maliang
+from maliang import theme
 import oobeGUI
 from tkinter import messagebox
 
@@ -40,6 +41,15 @@ def set_username(inputbox_name, cv):
             return True
         except Exception as e:
             messagebox.showerror("EECT OOBE", f"设置用户名失败，详细信息：\n{e}")
+
+
+def set_color(mode):
+    if mode == 0:
+        theme.set_color_mode("system")
+    elif mode == 1:
+        theme.set_color_mode("dark")
+    else:
+        theme.set_color_mode("light")
 
 
 def oobe():
