@@ -35,7 +35,7 @@ def set_shutdown_time(entry) -> messagebox.askokcancel:
         if msg(f'确定要关机吗？关机将在{time}秒后执行。'):
             shutdown(time)
     except ValueError as f:
-        logger.error(f"输入的值不正确：{f}")
+        logger.warning(f"输入的值不正确：{f}")
         messagebox.showerror('错误', f'你输入的值不正确\n\n{f}')
 
 
@@ -45,7 +45,7 @@ def set_restart_time(entry) -> messagebox.askokcancel:
         if msg(f'确定要重启吗？重启将在{time}秒后执行。'):
             restart(time)
     except ValueError as f:
-        logger.error(f"输入的值不正确：{f}")
+        logger.warning(f"输入的值不正确：{f}")
         messagebox.showerror('错误', f'你输入的值不正确\n\n{f}')
 
 

@@ -10,6 +10,7 @@ from loguru import logger
 import traceback
 
 # 自制模块
+import err
 import shutdown
 import FindGames
 import about
@@ -30,7 +31,7 @@ log_file_name = f"{time_now}.log"
 log_file_path = os.path.join(log_dir, log_file_name)
 
 # 配置日志
-logger.add(log_file_path, level='DEBUG', format='{time:YYYY-MM-DD HH:mm:ss} | {level} | {file}:{line} | {message}')
+logger.add(log_file_path, level='DEBUG', format='{time:YYYY-MM-DD HH:mm:ss} | {level} | {file}:{line} | {module} | {message}')
 
 logger.info("EECT启动")
 
@@ -44,7 +45,7 @@ with open('./config/config.toml', 'rb') as f:
         UseRegistry = config['UseRegistry']
     except KeyError as e:
         ExperienceTheFeatures = False
-        messagebox.showwarning("配置文件错误", f"读取配置文件时出错，一些功能将不可用\n\n详细信息：{e}\n\n已记录日志")
+        err.show_error(traceback.format_exc(), 0)
         logger.error(f"读取配置文件时错误，堆栈信息：\n{traceback.format_exc()}")
 
 
@@ -73,7 +74,7 @@ cv.place(width=600, height=400)
 root.center()
 root.title("EECT")
 root.resizable(False, False)
-root.at_exit(command=lambda: logger.info("正常关闭程序"))
+root.at_exit(command=lambda: logger.info("程序关闭"))
 if ExperienceTheFeatures:
     logger.info("EECT已启用体验功能")
     root.title("EECT - 已启用体验功能")
@@ -127,9 +128,9 @@ def auto_shutdown():
     restart_time_entry = maliang.InputBox(auto_shutdown_window_cv, (50, 80), (90, 40))
     restart_time_entry.insert(0, '60')  # 默认值为60秒
 
-    restart_button = maliang.Button(auto_shutdown_window_cv, (150, 80), text='在设定的时间后重启',command=lambda: shutdown.set_restart_time(restart_time_entry))
+    restart_button = maliang.Button(auto_shutdown_window_cv, (150, 80), text='在设定的时间后重启', command=lambda: shutdown.set_restart_time(restart_time_entry))
 
-    cancel_button = maliang.Button(auto_shutdown_window_cv, (120, 140), text='取消关机或重启',command=shutdown.set_cancel_shutdown)
+    cancel_button = maliang.Button(auto_shutdown_window_cv, (120, 140), text='取消关机或重启', command=shutdown.set_cancel_shutdown)
 
     tip = maliang.Label(auto_shutdown_window_cv, (35, 200), fontsize=12, text="Tips: 你也可以在cmd输入 shutdown /s /t [秒数] 定时关机")
 
@@ -206,10 +207,11 @@ def find_games_toplevel():
                 f.write("")
 
         logger.info(f"写入缓存数据: ./cache/查找游戏-{current_time}.txt")
-        with open(f"", "w", encoding="utf-8") as f:
+        with open(f"/cache/查找游戏-{current_time}.txt", "w", encoding="utf-8") as f:
             f.write("查找游戏结果：\n")
             for game_name, game_path in data:
                 f.write(f"{game_name}: {game_path}\n")
+                logger.info("完成本次查找")
 
         find_games_windows_cv.destroy()
         find_games_windows_cv = maliang.Canvas(find_games_windows, auto_zoom=False)

@@ -1,6 +1,7 @@
 import winreg
 from loguru import logger
 import traceback
+import err
 
 
 # TODO:他奶奶的，快把任务栏星期做完！
@@ -23,6 +24,7 @@ def show_seconds_in_system_clock(value):    # 在任务栏上的时间显示秒
         logger.info(f"成功修改注册表 HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced 的值为{value}")
     except PermissionError as e:
         logger.error("没有权限修改注册表")
+        err.show_error(traceback.format_exc(), 0)
         return e
     except FileNotFoundError:
         logger.error("注册表项 HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced 不存在，创建新的注册表项 HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced")
@@ -55,12 +57,15 @@ def show_weekday_in_taskbar(value):  # 在任务栏上显示星期
             winreg.KEY_SET_VALUE
         )
         # 修改短日期格式（添加 dddd 显示星期）
-        winreg.SetValueEx(key, "sShortDate", 0, winreg.REG_SZ, date)
         logger.info(f"修改注册表 HKEY_CURRENT_USER\Control Panel\International 的值为{date}")
+        winreg.SetValueEx(key, "sShortDate", 0, winreg.REG_SZ, date)
+        logger.info(f"成功修改注册表 HKEY_CURRENT_USER\Control Panel\International 的值为{date}")
         print(f"已成功修改：任务栏日期将显示{date}")
         winreg.CloseKey(key)
+        logger.info("关闭注册表")
     except PermissionError as e:
         logger.error("没有权限修改注册表")
+        err.show_error(traceback.format_exc(), 0)
         return e
     except Exception as e:
         logger.error("修改注册表时出错，堆栈信息：\n" + traceback.format_exc())
