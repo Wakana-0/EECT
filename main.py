@@ -6,6 +6,8 @@ import os
 import datetime
 import tomllib
 import webbrowser
+from loguru import logger
+import traceback
 
 # 自制模块
 import shutdown
@@ -13,8 +15,26 @@ import FindGames
 import about
 import reg
 import settings
+import dialog # 弹窗相关
 
 
+# 创建logs目录，如果不存在
+log_dir = 'logs'
+if not os.path.exists(log_dir):
+    os.makedirs(log_dir)
+
+# 获取当前日期和时间yyyy-mm-dd HH:MM:SS
+time_now = datetime.datetime.now().strftime("%Y-%m-%d %H`%M`%S")
+# 设置日志文件名为当前日期和时间
+log_file_name = f"{time_now}.log"
+log_file_path = os.path.join(log_dir, log_file_name)
+
+# 配置日志
+logger.add(log_file_path, level='DEBUG', format='{time:YYYY-MM-DD HH:mm:ss} | {level} | {file}:{line} | {message}')
+
+logger.info("EECT启动")
+
+logger.info("EECT正在读取配置文件: ./config/config.toml")
 # 读取配置文件
 with open('./config/config.toml', 'rb') as f:
     config = tomllib.load(f)
@@ -24,19 +44,27 @@ with open('./config/config.toml', 'rb') as f:
         UseRegistry = config['UseRegistry']
     except KeyError as e:
         ExperienceTheFeatures = False
-        messagebox.showwarning("配置文件错误", f"读取配置文件时出错\n\n详细信息：{e}")
+        messagebox.showwarning("配置文件错误", f"读取配置文件时出错，一些功能将不可用\n\n详细信息：{e}\n\n已记录日志")
+        logger.error(f"读取配置文件时错误，堆栈信息：\n{traceback.format_exc()}")
+
+
 
 try:
+    logger.info("EECT正在读取版本信息: ./config/version.toml")
     with open('./config/version.toml', 'rb') as f:
         version = tomllib.load(f)
     current_version = version['version']
     current_version_code = version['version_code']
 except FileNotFoundError as e:
+    logger.error(f"EECT无法读取版本信息，堆栈信息：\n{traceback.format_exc()}")
     messagebox.showerror("配置文件错误", f"无法获取当前的版本信息\n\n详细信息：{e}")
 except KeyError as e:
+    logger.error(f"EECT无法读取版本信息，堆栈信息：\n{traceback.format_exc()}")
     messagebox.showerror("配置文件错误", f"读取版本信息时出错\n\n详细信息：{e}")
+    logger.info("程序退出")
     exit(0)
 
+logger.info("创建窗口 root")
 size = 600, 400
 toplevel_size = 430, 350
 root = maliang.Tk(size=size, icon="./img/EECT_logo.ico")
@@ -45,7 +73,9 @@ cv.place(width=600, height=400)
 root.center()
 root.title("EECT")
 root.resizable(False, False)
+root.at_exit(command=lambda: logger.info("正常关闭程序"))
 if ExperienceTheFeatures:
+    logger.info("EECT已启用体验功能")
     root.title("EECT - 已启用体验功能")
 
 
@@ -53,6 +83,8 @@ if ExperienceTheFeatures:
 
 
 def About():
+    logger.info("调用 About 函数")
+    logger.info("创建窗口 About")
     About = maliang.Toplevel(root, size=(650, 480), icon="./img/EECT_logo.ico")
     About.center()
     About_cv = maliang.Canvas(About, auto_zoom=False)
@@ -73,11 +105,12 @@ def About():
     issues = maliang.UnderlineButton(About_sidebar_cv, (0, 160), text="意见反馈", fontsize=16, command=lambda: webbrowser.open_new("https://github.com/EECT/EECT/issues"))
     open_source_license = maliang.UnderlineButton(About_sidebar_cv, (0, 190), text="开放源代码许可", fontsize=16, command=lambda: about.open_source_license(About))
     free_software_statement = maliang.UnderlineButton(About_sidebar_cv, (0, 220), text="免费软件声明", fontsize=16, command=lambda: about.free_software_statement(About))
-
     c = maliang.Label(About_cv, (20, 430), text="Copyright © 2025 EECT Team, All Rights Reserved.", fontsize=12)
 
 
 def auto_shutdown():
+    logger.info("调用 auto_shutdown 函数")
+    logger.info("创建窗口 auto_shutdown_window")
     auto_shutdown_window = maliang.Toplevel(root, size=(400, 250), icon="./img/EECT_logo.ico")
     auto_shutdown_window.center()
     auto_shutdown_window_cv = maliang.Canvas(auto_shutdown_window, auto_zoom=False)
@@ -102,6 +135,8 @@ def auto_shutdown():
 
 
 def Windows_tools_toplevel():
+    logger.info("调用 Windows_tools_toplevel 函数")
+    logger.info("创建窗口 windows_tools_window")
     windows_tools_window = maliang.Toplevel(root, size=toplevel_size, icon="./img/EECT_logo.ico")
     windows_tools_window.center()
     windows_tools_window_cv = maliang.Canvas(windows_tools_window, auto_zoom=False)
@@ -121,6 +156,8 @@ def Windows_tools_toplevel():
 
 
 def find_games_toplevel():
+    logger.info("调用 find_games_toplevel 函数")
+    logger.info("创建窗口 find_games_toplevel")
     find_games_window = maliang.Toplevel(root, size=toplevel_size, icon="./img/EECT_logo.ico")
     find_games_window.center()
     find_games_window_cv = maliang.Canvas(find_games_window, auto_zoom=False)
@@ -131,6 +168,8 @@ def find_games_toplevel():
 
 
     def find_games_window_def(root):
+        logger.info("调用 find_games_window_def 函数")
+        logger.info("创建窗口 find_games_windows")
         find_games_windows = maliang.Toplevel(find_games_window, size=(250, 70), title="正在查找……")
         find_games_windows.toolwindow(True)
         find_games_windows.center()
@@ -143,6 +182,7 @@ def find_games_toplevel():
         data = FindGames.find_games(root)
 
         if not Cache:
+            logger.info("缓存被禁用")
             finding_text.destroy()
             find_spinner = maliang.Spinner(find_games_windows_cv, (10, 15), mode="indeterminate")
             finding_text = maliang.Text(find_games_windows_cv, (55, 10), text=f"扫描失败\n当前配置不允许使用缓存。\n因为 Cache={Cache}", fontsize=14)
@@ -151,17 +191,22 @@ def find_games_toplevel():
             return
 
         # 获取当前时间
+        logger.info("获取当前时间")
         current_time = datetime.datetime.now().strftime("%Y-%m-%d %H_%M_%S")
+        logger.info(f"当前时间：{current_time}")
 
+        logger.info("缓存数据")
         try:
             with open("./cache/cache", "w") as f:
                 f.write("")
-        except FileNotFoundError:
+        except FileNotFoundError as em:
+            logger.info("缓存文件不存在，创建缓存目录")
             os.makedirs("./cache")
             with open("./cache/cache", "w") as f:
                 f.write("")
 
-        with open(f"./cache/查找游戏-{current_time}.txt", "w", encoding="utf-8") as f:
+        logger.info(f"写入缓存数据: ./cache/查找游戏-{current_time}.txt")
+        with open(f"", "w", encoding="utf-8") as f:
             f.write("查找游戏结果：\n")
             for game_name, game_path in data:
                 f.write(f"{game_name}: {game_path}\n")
@@ -180,6 +225,8 @@ def find_games_toplevel():
 
 
 def software_recommendations_toplevel():
+    logger.info("调用 software_recommendations_toplevel 函数")
+    logger.info("创建窗口 software_recommendations_window")
     software_recommendations_window = maliang.Toplevel(root, size=toplevel_size, icon="./img/EECT_logo.ico")
     software_recommendations_window.center()
     software_recommendations_window_cv = maliang.Canvas(software_recommendations_window, auto_zoom=False)
@@ -190,10 +237,12 @@ def software_recommendations_toplevel():
 
 
 def taskbar():
+    logger.info("调用 taskbar 函数")
     if not UseRegistry:
+        logger.info("注册表相关功能被禁用")
         messagebox.showerror("功能被锁定", "当前配置不允许使用注册表相关功能。")
         return
-
+    logger.info("创建窗口 taskbar_window")
     taskbar_window = maliang.Toplevel(root, size=toplevel_size, icon="./img/EECT_logo.ico")
     taskbar_window.center()
     taskbar_window_cv = maliang.Canvas(taskbar_window, auto_zoom=False)
@@ -213,6 +262,7 @@ def taskbar():
     restart_explorer = maliang.Button(taskbar_window_cv, (10, 300), text='重启资源管理器', command=lambda: os.system("taskkill /f /im explorer.exe & start explorer.exe"))
 
 
+logger.info("创建窗口 root 上的按钮")
 home_text = maliang.Text(cv, (20, 20), text="“实用”小工具", fontsize=16)
 home_button1 = maliang.Button(cv, (20, 60), text="定时关机", command=auto_shutdown)
 home_button2 = maliang.Button(cv, (130, 60), text="查找电脑上的游戏", command=find_games_toplevel)
