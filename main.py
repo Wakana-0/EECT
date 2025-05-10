@@ -278,4 +278,5 @@ home_button5 = maliang.Button(cv, (20, 355), text="    关于    ", command=Abou
 settings_button = maliang.Button(cv, (130, 355), text="设置", command=lambda: settings.settingsGUI(root))
 
 
+logger.info("EECT准备就绪，进入主循环")
 root.mainloop()

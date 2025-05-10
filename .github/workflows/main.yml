@@ -63,7 +63,7 @@ jobs:
           img=img
           config=config
         enable-plugins: tk-inter
-        windows-console-mode: disable
+        windows-console-mode: attach
 
     - name: Zip the build artifact
       run: |
