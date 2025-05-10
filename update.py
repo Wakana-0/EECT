@@ -1,11 +1,15 @@
 import requests
 import tomllib
 from packaging import version
-import threading
+from loguru import logger
+import traceback
+import err
 
 
 # 获取更新配置
-def get_update_config() -> str:
+def get_update_config():
+    logger.info("调用函数 get_update_config")
+    logger.info("获取当前更新配置")
     with open('./config/update_config.toml', 'rb') as f:
         update_config = tomllib.load(f)
         url = update_config['url']
@@ -13,21 +17,22 @@ def get_update_config() -> str:
 
 
 # 检查更新
-def check_update() -> tuple[str, str, int, str, bool]:
+def check_update():
     # 检查是否有更新
     url = get_update_config()
     response = requests.get(url, verify=False)  # verify=False用于忽略SSL证书验证
-    if response.status_code == 200:
+    try:
         data = response.text
         data = tomllib.loads(data)
 
-        new_version: str = data['version']
-        version_code: str = data['version_code']
-        date: int = data['date']
-        changelog: str = data['changelog']
-        importance: bool = data['importance']
+        new_version = data['version']
+        version_code = data['version_code']
+        date = data['date']
+        changelog = data['changelog']
+        importance = data['importance']
         return new_version, version_code, date, changelog, importance
-    else:
+    except Exception:
+        err.show_error(traceback.format_exc(), 0)
         print(response.status_code)
         with open('./config/update.toml', 'rb') as f:
             update_data = tomllib.load(f)
@@ -38,8 +43,9 @@ def check_update() -> tuple[str, str, int, str, bool]:
             importance = update_data['importance']
             return new_version, version_code, date, changelog, importance
 
-# 检查当前程序版本
-def check_version(value: int) -> str:
+
+
+def check_version(value):   # 检查当前程序版本
     # 检查版本
     with open('./config/version.toml', 'rb') as f:
         version_data = tomllib.load(f)
@@ -52,7 +58,7 @@ def check_version(value: int) -> str:
 
 
 # 比较版本号
-def compare_versions(current_version: str, update_version: str) -> bool:
+def compare_versions(current_version, update_version):
     current_version = version.parse(current_version)
     update_version = version.parse(update_version)
     if current_version >= update_version:
