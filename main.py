@@ -15,6 +15,7 @@ import FindGames
 import about
 import reg
 import settings
+import dialog # 弹窗相关
 
 
 # 创建logs目录，如果不存在
@@ -104,7 +105,6 @@ def About():
     issues = maliang.UnderlineButton(About_sidebar_cv, (0, 160), text="意见反馈", fontsize=16, command=lambda: webbrowser.open_new("https://github.com/EECT/EECT/issues"))
     open_source_license = maliang.UnderlineButton(About_sidebar_cv, (0, 190), text="开放源代码许可", fontsize=16, command=lambda: about.open_source_license(About))
     free_software_statement = maliang.UnderlineButton(About_sidebar_cv, (0, 220), text="免费软件声明", fontsize=16, command=lambda: about.free_software_statement(About))
-
     c = maliang.Label(About_cv, (20, 430), text="Copyright © 2025 EECT Team, All Rights Reserved.", fontsize=12)
 
 
@@ -199,7 +199,7 @@ def find_games_toplevel():
         try:
             with open("./cache/cache", "w") as f:
                 f.write("")
-        except FileNotFoundError:
+        except FileNotFoundError as em:
             logger.info("缓存文件不存在，创建缓存目录")
             os.makedirs("./cache")
             with open("./cache/cache", "w") as f:

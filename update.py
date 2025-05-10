@@ -1,10 +1,11 @@
 import requests
 import tomllib
 from packaging import version
+import threading
 
 
 # 获取更新配置
-def get_update_config():
+def get_update_config() -> str:
     with open('./config/update_config.toml', 'rb') as f:
         update_config = tomllib.load(f)
         url = update_config['url']
@@ -12,7 +13,7 @@ def get_update_config():
 
 
 # 检查更新
-def check_update():
+def check_update() -> tuple[str, str, int, str, bool]:
     # 检查是否有更新
     url = get_update_config()
     response = requests.get(url, verify=False)  # verify=False用于忽略SSL证书验证
@@ -20,11 +21,11 @@ def check_update():
         data = response.text
         data = tomllib.loads(data)
 
-        new_version = data['version']
-        version_code = data['version_code']
-        date = data['date']
-        changelog = data['changelog']
-        importance = data['importance']
+        new_version: str = data['version']
+        version_code: str = data['version_code']
+        date: int = data['date']
+        changelog: str = data['changelog']
+        importance: bool = data['importance']
         return new_version, version_code, date, changelog, importance
     else:
         print(response.status_code)
@@ -38,7 +39,7 @@ def check_update():
             return new_version, version_code, date, changelog, importance
 
 # 检查当前程序版本
-def check_version(value):
+def check_version(value: int) -> str:
     # 检查版本
     with open('./config/version.toml', 'rb') as f:
         version_data = tomllib.load(f)
@@ -51,7 +52,7 @@ def check_version(value):
 
 
 # 比较版本号
-def compare_versions(current_version, update_version):
+def compare_versions(current_version: str, update_version: str) -> bool:
     current_version = version.parse(current_version)
     update_version = version.parse(update_version)
     if current_version >= update_version:
