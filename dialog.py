@@ -4,6 +4,8 @@ import update
 from tkinter import messagebox
 from loguru import logger
 
+
+# TODO: 完善错误信息弹窗
 # 错误信息弹窗
 def ErrorDialog(window: maliang.Tk, error_message, title="错误信息") -> None:
     # 日志记录 & 窗口创建
