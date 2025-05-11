@@ -5,12 +5,16 @@ from loguru import logger
 import threading
 from queue import Queue
 import traceback
+import err
 
 # 全局变量，用于控制下载是否中断
 download_interrupted = threading.Event()
+wrote = 0
+total_size = 0
 
 
 def download_file(file_name, file_url, file_path, progress_queue=None):
+    global wrote, total_size
     """
     下载文件并显示进度条（支持中断）
 
@@ -24,6 +28,7 @@ def download_file(file_name, file_url, file_path, progress_queue=None):
         response.raise_for_status()
 
         total_size = int(response.headers.get('content-length', 0))
+        print(total_size)
         block_size = 1024
         wrote = 0
 
@@ -45,18 +50,22 @@ def download_file(file_name, file_url, file_path, progress_queue=None):
                     pbar.update(len(data))
                     if progress_queue:
                         progress_queue.put((wrote / total_size * 100) if total_size > 0 else 0)
-
-        if total_size != 0 and wrote != total_size:
-            logger.error("下载的文件大小与预期不符")
-        else:
-            logger.info("文件下载完成")
+                    if wrote >= total_size:
+                        logger.info("文件下载完成")
+                        return True
 
     except requests.exceptions.Timeout:
         logger.error(f"下载超时，{traceback.format_exc()}")
+        err.show_error(traceback.format_exc(), 0)
+        return False
     except requests.exceptions.RequestException:
         logger.error(f"请求失败: {traceback.format_exc()}")
+        err.show_error(traceback.format_exc(), 0)
+        return False
     except Exception:
         logger.error(f"下载过程中发生错误: {traceback.format_exc()}")
+        err.show_error(traceback.format_exc(), 0)
+        return False
 
 
 def download_in_thread(file_name, file_url, file_path):
@@ -84,6 +93,17 @@ def stop_download():
     logger.info("请求中断下载")
     download_interrupted.set()
     logger.info("下载中断标志已设置")
+
+
+def get_download_progress():
+    """
+    获取当前下载进度
+
+    :return: 下载进度（小数）
+    """
+    if total_size > 0:
+        return wrote / total_size
+    return 0
 
 
 if __name__ == "__main__":
