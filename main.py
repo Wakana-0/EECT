@@ -16,7 +16,7 @@ import FindGames
 import about
 import reg
 import settings
-import dialog # 弹窗相关
+import dialog  # 弹窗相关
 
 
 # 创建logs目录，如果不存在

@@ -4,6 +4,8 @@ from packaging import version
 from loguru import logger
 import traceback
 import err
+import zipfile
+import os
 
 
 # 获取更新配置
@@ -30,7 +32,9 @@ def check_update():
         date = data['date']
         changelog = data['changelog']
         importance = data['importance']
-        return new_version, version_code, date, changelog, importance
+        zip_name = data['file_name']
+        url = data['download_url']
+        return new_version, version_code, date, changelog, importance, zip_name, url
     except Exception:
         err.show_error(traceback.format_exc(), 0)
         print(response.status_code)
@@ -41,7 +45,9 @@ def check_update():
             date = update_data['date']
             changelog = update_data['changelog']
             importance = update_data['importance']
-            return new_version, version_code, date, changelog, importance
+            zip_name = update_data['file_name']
+            url = update_data['download_url']
+            return new_version, version_code, date, changelog, importance, zip_name, url
 
 
 
@@ -69,7 +75,7 @@ def compare_versions(current_version, update_version):
 
 def update():
     # 检查更新
-    new_version, version_code, date, changelog, importance = check_update()
+    new_version, version_code, date, changelog, importance, zip_name, url = check_update()
     if new_version is None:
         return False  # 如果没有更新，则返回False
 
@@ -79,9 +85,41 @@ def update():
     print(f"发布日期: {date}")
     print(f"更新日志: {changelog}")
     print(f"重要性: {importance}")
+    print(f"下载链接: {url}")
+    print(f"文件名: {zip_name}")
     compare_ver = compare_versions(check_version(1), new_version)
     print("对比版本号", compare_ver)
-    return compare_ver, new_version, version_code, date, changelog, importance
+    return compare_ver, new_version, version_code, date, changelog, importance, zip_name, url
+
+
+def unzip_file(zip_path, extract_to):
+    """
+    解压 .zip 文件到指定目录
+
+    :param zip_path: 要解压的 .zip 文件路径
+    :param extract_to: 解压目标目录
+    """
+    try:
+        # 检查 zip 文件是否存在
+        if not os.path.exists(zip_path):
+            logger.error(f"解压文件不存在: {zip_path}")
+            return False
+
+        # 检查目标目录是否存在，不存在则创建
+        if not os.path.exists(extract_to):
+            os.makedirs(extract_to)
+
+        # 解压文件
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            zip_ref.extractall(extract_to)
+            logger.info(f"成功解压 {zip_path} 到 {extract_to}")
+            return True
+
+    except zipfile.BadZipFile:
+        logger.error(f"文件不是有效的 .zip 文件: {zip_path}")
+    except Exception as e:
+        logger.error(f"解压失败: {e}")
+    return False
 
 
 if __name__ == '__main__':

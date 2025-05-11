@@ -1,79 +1,103 @@
 import requests
 import os
-import maliang
-
-# import json #用于加载配置文件
-# import tomllib #用于加载配置文件
-# TODO: 增加配置文件功能
-
 from tqdm import tqdm
 from loguru import logger
+import threading
+from queue import Queue
+import traceback
 
-# 获取当前用户的“下载”文件夹路径
-def get_download_folder() -> str:
-    return os.path.join(os.path.expanduser("~"), "Downloads")
+# 全局变量，用于控制下载是否中断
+download_interrupted = threading.Event()
 
-# 打开下载文件夹
-def open_explorer(path):
-    os.startfile(path)
 
-# 配置文件字典
-config = {
-    "download_folder": get_download_folder()  # 默认存放位置为“下载”文件夹
-}
+def download_file(file_name, file_url, file_path, progress_queue=None):
+    """
+    下载文件并显示进度条（支持中断）
 
-# 文件下载并显示进度条
-def download_file(file_url, file_path):
-    '''下载器核心'''
+    :param file_name: 文件名
+    :param file_url: 下载链接
+    :param file_path: 保存路径
+    :param progress_queue: 进度队列（可选）
+    """
     try:
-        response = requests.get(file_url, stream=True, timeout=60)  # 设置超时
-        response.raise_for_status()  # 如果响应状态码不是 200，会抛出异常
+        response = requests.get(file_url, stream=True, timeout=60, verify=False)
+        response.raise_for_status()
 
-        # 获取 Content-Length 或使用未知大小
-        total_size = response.headers.get("content-length")
-        if total_size is None:
-            logger.warning("无法获取文件大小，下载可能会比较慢。")
-            total_size = 0  # 设置为 0，下载时不会有进度条，直到下载完成
+        total_size = int(response.headers.get('content-length', 0))
+        block_size = 1024
+        wrote = 0
 
-        total_size = int(total_size) if total_size else 0
+        # 创建缓存目录（如果不存在）
+        if not os.path.exists(file_path):
+            os.makedirs(file_path)
 
-        block_size = 1024  # 每次下载的块大小
-        progress_bar = tqdm(total=total_size, unit="B", unit_scale=True)
+        logger.info("开始下载文件...")
+        with open(os.path.join(file_path, file_name), "wb") as file:
+            with tqdm(total=total_size, unit='B', unit_scale=True) as pbar:
+                for data in response.iter_content(block_size):
+                    # 检查是否中断
+                    if download_interrupted.is_set():
+                        logger.info("下载已中断")
+                        return
 
-        # 预留图形界面进度条显示
-        # TODO: 增加图形界面进度条显示
-        # maliang.ProgressBar(cv, (10, 10)).set(0) # 设置进度条起始位置 # 修改点：cv
+                    wrote += len(data)
+                    file.write(data)
+                    pbar.update(len(data))
+                    if progress_queue:
+                        progress_queue.put((wrote / total_size * 100) if total_size > 0 else 0)
 
-        with open(file_path, "wb") as f:
-            for data in response.iter_content(block_size):
-
-                # 预留图形界面进度条显示
-                # maliang.ProgressBar(cv, (10, 10)).set(len(data/block_size)) # 更新进度条进度 # 修改点：cv
-
-                progress_bar.update(len(data))
-                f.write(data) # 写入文件
-
-        progress_bar.close()
-        open_explorer(config["download_folder"])
-        logger.info("文件下载完成")
+        if total_size != 0 and wrote != total_size:
+            logger.error("下载的文件大小与预期不符")
+        else:
+            logger.info("文件下载完成")
 
     except requests.exceptions.Timeout:
-        logger.error("下载超时，请检查网络连接或稍后重试。")
-    except requests.exceptions.RequestException as e:
-        logger.error(f"请求失败: {e}")
-    except Exception as e:
-        logger.error(f"下载过程中发生错误: {e}")
+        logger.error(f"下载超时，{traceback.format_exc()}")
+    except requests.exceptions.RequestException:
+        logger.error(f"请求失败: {traceback.format_exc()}")
+    except Exception:
+        logger.error(f"下载过程中发生错误: {traceback.format_exc()}")
 
-# 获取文件路径
-def get_file_path(config, file_url, custom_path=None):
-    if custom_path:
-        return os.path.join(config["download_folder"], custom_path)
-    return os.path.join(config["download_folder"], os.path.basename(file_url))
+
+def download_in_thread(file_name, file_url, file_path):
+    """
+    在单独线程中下载文件
+
+    :param file_name: 文件名
+    :param file_url: 下载链接
+    :param file_path: 保存路径
+    :return: 下载线程对象
+    """
+    progress_queue = Queue()
+    thread = threading.Thread(
+        target=download_file,
+        args=(file_name, file_url, file_path, progress_queue)
+    )
+    thread.start()
+    return thread
+
+
+def stop_download():
+    """
+    强制中断下载（设置标志位）
+    """
+    logger.info("请求中断下载")
+    download_interrupted.set()
+    logger.info("下载中断标志已设置")
 
 
 if __name__ == "__main__":
-    # 示例用法
-    info = ["https://i0.hdslb.com/bfs/face/71865821cf7cd5aef5e4f59f682a705d69cdf72e.jpg@120w_120h_1c.avif",\
-            ""
-            ]
-    download_file(info[0], get_file_path(config, info[0], info[1]))
+    # 示例：下载文件
+    file_name = "EECT_1.0.0.1.250509.1.-windows-x64.zip"
+    file_url = "https://github.com/EECT/EECT/releases/download/v1.0.0.1/EECT_1.0.0.1.250509.1.-windows-x64.zip"
+    file_path = "./cache/download"
+
+    # 确保下载目录存在
+    if not os.path.exists(file_path):
+        os.makedirs(file_path)
+
+    # 在单独线程中下载文件
+    download_thread = download_in_thread(file_name, file_url, file_path)
+
+    download_thread.join()  # 等待线程结束
+    print("程序结束")
