@@ -64,6 +64,7 @@ jobs:
           config=config
         enable-plugins: tk-inter
         windows-console-mode: attach
+        nofollow-import-to: about, FindGames, err, shutdown, reg, settings, dialog
 
     - name: Zip the build artifact
       run: |
