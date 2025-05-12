@@ -36,7 +36,7 @@ def update_progress_bar(progress_bar_name, progress):
             return
         progress = downloader.get_download_progress()
         progress_bar_name.set(progress)
-        time.sleep(0.2)
+        time.sleep(0.01)
 
 
 def update_progress_bar_threading(progress_bar_name, progress):

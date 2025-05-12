@@ -8,6 +8,7 @@ import tomllib
 import webbrowser
 from loguru import logger
 import traceback
+from multiprocessing import shared_memory
 
 # 自制模块
 import err
@@ -35,6 +36,28 @@ logger.add(log_file_path, level='DEBUG', format='{time:YYYY-MM-DD HH:mm:ss} | {l
 
 logger.info("EECT启动")
 
+try:
+    # 连接共享内存，检查是否有EECT在运行
+    shm = shared_memory.SharedMemory(name='EECT_setup')
+    # 从共享内存中读取数据
+    data = shm.buf[:].tobytes().decode('utf-8', errors='ignore')
+    print(data)
+    # 关闭共享内存连接
+    shm.close()
+    logger.warning("EECT已经在运行，无法再次启动")
+    exit(1)  # 终止程序
+except Exception:
+    logger.warning("EECT没有运行，创建共享内存")
+    # 创建或打开共享内存
+    shm = shared_memory.SharedMemory(name='EECT_setup', create=True, size=32)
+    # 写入数据
+    data = "114514"
+    # 将数据编码为字节并写入共享内存
+    shm.buf[:len(data)] = data.encode('utf-8')
+    # 关闭共享内存
+    shm.close()
+
+
 logger.info("EECT正在读取配置文件: ./config/config.toml")
 # 读取配置文件
 with open('./config/config.toml', 'rb') as f:
@@ -47,7 +70,6 @@ with open('./config/config.toml', 'rb') as f:
         ExperienceTheFeatures = False
         err.show_error(traceback.format_exc(), 0)
         logger.error(f"读取配置文件时错误，堆栈信息：\n{traceback.format_exc()}")
-
 
 
 try:
@@ -74,13 +96,21 @@ cv.place(width=600, height=400)
 root.center()
 root.title("EECT")
 root.resizable(False, False)
-root.at_exit(command=lambda: logger.info("程序关闭"))
+root.at_exit(command=lambda: EECT_exit())
 if ExperienceTheFeatures:
     logger.info("EECT已启用体验功能")
     root.title("EECT - 已启用体验功能")
 
 
 # TODO: 这他妈写的太乱了，记得找个时间重构
+
+
+def EECT_exit():
+    logger.info("调用 EECT_exit 函数")
+    logger.info("关闭共享内存")
+    shm.close()
+    shm.unlink()
+    logger.info("EECT退出")
 
 
 def About():
