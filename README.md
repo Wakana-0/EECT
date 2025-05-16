@@ -5,11 +5,14 @@
 
 
 <p align="center">
- 面向不太会使用电脑的电教委的电教委工具。
+ 简洁、易用的电教委工具。
 </p>
 
 
 ## 使用文档
+> [!WARNING]
+> **注意：** 使用文档目前处于烂尾状态
+
 [转到使用文档（Wiki）](https://github.com/EECT/EECT/wiki)
 
 ## 安装 & 使用
@@ -29,4 +32,4 @@
 
 #### 下载 EECT
 您可在此应用 GitHub 仓库中下载最新的 EECT。  
-[转到releases页面](https://github.com/EECT/EECT/releases)
+[转到releases页面下载最新正式版EECT](https://github.com/EECT/EECT/releases)
