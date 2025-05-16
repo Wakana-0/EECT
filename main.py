@@ -72,10 +72,10 @@ try:
     current_version_code = version['version_code']
 except FileNotFoundError as e:
     logger.error(f"EECT无法读取版本信息，堆栈信息：\n{traceback.format_exc()}")
-    messagebox.showerror("配置文件错误", f"无法获取当前的版本信息\n\n详细信息：{e}")
+    err.show_error(traceback.format_exc(), 0)
 except KeyError as e:
     logger.error(f"EECT无法读取版本信息，堆栈信息：\n{traceback.format_exc()}")
-    messagebox.showerror("配置文件错误", f"读取版本信息时出错\n\n详细信息：{e}")
+    err.show_error(traceback.format_exc(), 1)
     logger.info("程序退出")
     exit(0)
 

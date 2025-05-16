@@ -119,6 +119,7 @@ def unzip_file(zip_path, extract_to):
         logger.error(f"文件不是有效的 .zip 文件: {zip_path}")
     except Exception as e:
         logger.error(f"解压失败: {e}")
+        err.show_error(traceback.format_exc(), 0)
     return False
 
 

@@ -12,7 +12,6 @@ def main():
 
 
 def get_config():
-    logger.info("调用 get_config 函数")
     logger.info("声明全局变量 config")
     global config
 

@@ -1,7 +1,5 @@
 import maliang
-from maliang import theme
-import tomllib
-import os
+from maliang import theme, animation
 from loguru import logger
 
 import update_settings
@@ -37,3 +35,4 @@ def settings_main(cv):
     download_source_choose = maliang.OptionButton(cv, (20, 240), text=("Github", "Proxy"), default=download_source)
 
     save = maliang.Button(cv, (265, 400), text="💾保存设置")
+    # animation.MoveWidget(save, (265*2, 0), 1200, fps=90, controller=animation.ease_out).start(delay=100)
