@@ -8,7 +8,6 @@ import tomllib
 import webbrowser
 from loguru import logger
 import traceback
-from multiprocessing import shared_memory
 
 # 自制模块
 import err
@@ -17,8 +16,6 @@ import FindGames
 import about
 import reg
 import settings
-import dialog  # 弹窗相关
-
 
 # 创建logs目录，如果不存在
 log_dir = 'logs'
@@ -36,26 +33,21 @@ logger.add(log_file_path, level='DEBUG', format='{time:YYYY-MM-DD HH:mm:ss} | {l
 
 logger.info("EECT启动")
 
-try:
-    # 连接共享内存，检查是否有EECT在运行
-    shm = shared_memory.SharedMemory(name='EECT_setup')
-    # 从共享内存中读取数据
-    data = shm.buf[:].tobytes().decode('utf-8', errors='ignore')
-    print(data)
-    # 关闭共享内存连接
-    shm.close()
-    logger.warning("EECT已经在运行，无法再次启动")
-    exit(1)  # 终止程序
-except Exception:
-    logger.warning("EECT没有运行，创建共享内存")
-    # 创建或打开共享内存
-    shm = shared_memory.SharedMemory(name='EECT_setup', create=True, size=32)
-    # 写入数据
-    data = "114514"
-    # 将数据编码为字节并写入共享内存
-    shm.buf[:len(data)] = data.encode('utf-8')
-    # 关闭共享内存
-    shm.close()
+# 创建logs目录，如果不存在
+log_dir = 'logs'
+if not os.path.exists(log_dir):
+    os.makedirs(log_dir)
+
+# 获取当前日期和时间yyyy-mm-dd HH:MM:SS
+time_now = datetime.datetime.now().strftime("%Y-%m-%d %H`%M`%S")
+# 设置日志文件名为当前日期和时间
+log_file_name = f"{time_now}.log"
+log_file_path = os.path.join(log_dir, log_file_name)
+
+# 配置日志
+logger.add(log_file_path, level='DEBUG', format='{time:YYYY-MM-DD HH:mm:ss} | {level} | {file}:{line} | {module} | {message}')
+
+logger.info("EECT启动")
 
 
 logger.info("EECT正在读取配置文件: ./config/config.toml")
@@ -107,9 +99,6 @@ if ExperienceTheFeatures:
 
 def EECT_exit():
     logger.info("调用 EECT_exit 函数")
-    logger.info("关闭共享内存")
-    shm.close()
-    shm.unlink()
     logger.info("EECT退出")
 
 

@@ -15,7 +15,6 @@ download_interrupted = threading.Event()
 def stop(cv, window):
     """停止下载"""
     logger.info("调用函数 stop")
-    download_interrupted.set()
     downloader.stop_download()
     update_info(cv, window)
 
@@ -25,7 +24,10 @@ def get_progress_bar(progress_bar_name):
     return progress_bar_name.get()
 
 
-def update_progress_bar(progress_bar_name, progress):
+def update_progress_bar(cv, window, progress_bar_name, progress):
+    if progress != 0:
+        progress_bar_name.set(0)
+
     """更新进度条"""
     while not progress_bar_name.get() >= 1 and not download_interrupted.is_set():
         if progress_bar_name.get() >= 1:
@@ -36,15 +38,16 @@ def update_progress_bar(progress_bar_name, progress):
             return
         progress = downloader.get_download_progress()
         progress_bar_name.set(progress)
-        time.sleep(0.01)
+        time.sleep(0.2)
+    ready_install_update(cv, window)
 
 
-def update_progress_bar_threading(progress_bar_name, progress):
+def update_progress_bar_threading(cv, window, progress_bar_name, progress):
     """在单独线程中更新进度条"""
     logger.info("调用函数 update_progress_bar_threading")
     thread = threading.Thread(
         target=update_progress_bar,
-        args=(progress_bar_name, progress)
+        args=(cv, window, progress_bar_name, progress)
     )
     thread.start()
     return thread
@@ -97,10 +100,18 @@ def download_update(cv, window, name, url):
     wait = maliang.Spinner(cv, (150, 180), mode="indeterminate")
     update_text = maliang.Text(cv, (210, 180), text="正在下载更新，请稍等...")
     download_progress = maliang.ProgressBar(cv, (100, 220))
-    update_progress_bar_threading(download_progress, downloader.get_download_progress())
-    back = maliang.Button(cv, (240, 300), text="停止下载", command=lambda: stop(cv, window))
+    download_progress.set(0)
+    update_progress_bar_threading(cv, window, download_progress, downloader.get_download_progress())
+    back = maliang.Button(cv, (240, 300), text="取消下载", command=lambda: stop(cv, window))
     downloader.download_in_thread(name, url, "./cache/download")
 
+
+def ready_install_update(cv, window):
+    logger.info("调用函数 read_install_update")
+    cv.clear()
+    title = maliang.Text(cv, (200, 180), text="更新下载完成，立即安装？")
+    yes = maliang.Button(cv, (240, 300), text="安装更新")
+    no = maliang.Button(cv, (240, 350), text="暂不安装", command=lambda: update_info(cv, window))
 
 
 if __name__ == "__main__":

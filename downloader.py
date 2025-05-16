@@ -11,10 +11,11 @@ import err
 download_interrupted = threading.Event()
 wrote = 0
 total_size = 0
+should_interrupt = True  # 控制是否真正中断
 
 
 def download_file(file_name, file_url, file_path, progress_queue=None):
-    global wrote, total_size
+    global wrote, total_size, should_interrupt
     """
     下载文件并显示进度条（支持中断）
 
@@ -24,6 +25,7 @@ def download_file(file_name, file_url, file_path, progress_queue=None):
     :param progress_queue: 进度队列（可选）
     """
     try:
+        stop_download(interrupt=False)
         response = requests.get(file_url, stream=True, timeout=60, verify=False)
         response.raise_for_status()
 
@@ -41,7 +43,7 @@ def download_file(file_name, file_url, file_path, progress_queue=None):
             with tqdm(total=total_size, unit='B', unit_scale=True) as pbar:
                 for data in response.iter_content(block_size):
                     # 检查是否中断
-                    if download_interrupted.is_set():
+                    if should_interrupt and download_interrupted.is_set():
                         logger.info("下载已中断")
                         return
 
@@ -86,13 +88,31 @@ def download_in_thread(file_name, file_url, file_path):
     return thread
 
 
-def stop_download():
+def stop_download(interrupt=True):
     """
     强制中断下载（设置标志位）
+
+    :param interrupt: 是否真正中断下载，默认为True
     """
+    global should_interrupt
     logger.info("请求中断下载")
-    download_interrupted.set()
-    logger.info("下载中断标志已设置")
+    if interrupt:
+        download_interrupted.set()
+        should_interrupt = True
+        logger.info("下载中断标志已设置")
+    else:
+        should_interrupt = False
+        logger.info("未设置下载中断标志，下载将继续")
+        resume_download()
+
+
+def resume_download():
+    """
+    恢复下载（清除标志位）
+    """
+    logger.info("请求恢复下载")
+    download_interrupted.clear()
+    logger.info("下载中断标志已取消")
 
 
 def get_download_progress():
@@ -118,6 +138,3 @@ if __name__ == "__main__":
 
     # 在单独线程中下载文件
     download_thread = download_in_thread(file_name, file_url, file_path)
-
-    download_thread.join()  # 等待线程结束
-    print("程序结束")
