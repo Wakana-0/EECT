@@ -4,6 +4,8 @@ import tomllib
 import os
 from loguru import logger
 
+import settingsGUI
+
 config = None
 
 
@@ -55,7 +57,7 @@ UseRegistry = {str(reg_val).lower()}
         f.write(new_config)
     logger.info("保存配置成功")
 
-
+'''
 def settingsGUI(window):
     logger.info("调用 settingsGUI 函数")
     logger.info("创建窗口 settings_window")
@@ -86,7 +88,7 @@ def settingsGUI(window):
     reg_switch = maliang.Switch(settings_window_cv, (10, 160))
     reg_switch.set(reg_val)
     maliang.Text(settings_window_cv, (80, 160), text="使用注册表相关功能")
-
+    
     # 添加保存按钮
     def on_save():
         logger.info("调用 on_save 函数")
@@ -107,9 +109,7 @@ def settingsGUI(window):
 
 
     save_btn = maliang.Button(settings_window_cv, (200, 250), text="保存更改", command=on_save)
-
+'''
 
 if __name__ == "__main__":
-    root = maliang.Tk()
-    settingsGUI(root)
-    root.mainloop()
+    settingsGUI.main_window()

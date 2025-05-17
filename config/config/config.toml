@@ -1,7 +1,0 @@
-
-# 使用缓存
-Cache = true
-# 体验功能
-ExperienceTheFeatures = false
-# 使用与注册表相关的功能
-UseRegistry = true
