@@ -1,0 +1,9 @@
+# 软件推荐列表
+
+# 写法示例
+[example]
+app_name = "example"  # 软件名称
+dl_URL = "https://example.com/example.exe"  # 软件下载链接
+icon_URL = "https://example.com/example.png"  # 软件图标
+introduction = "这是一个示例软件下载链接，请勿点击“下载”按钮"  #软件的简介
+# 注：值的内容必须是字符串，键的名称不得修改！
