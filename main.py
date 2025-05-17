@@ -11,6 +11,7 @@ import traceback
 
 # 自制模块
 import err
+import settingsGUI
 import shutdown
 import FindGames
 import about
@@ -296,7 +297,7 @@ if ExperienceTheFeatures:
     home_button4 = maliang.Button(cv, (20, 260), text="软件推荐`", command=software_recommendations_toplevel)
 
 home_button5 = maliang.Button(cv, (20, 355), text="    关于    ", command=About)
-settings_button = maliang.Button(cv, (130, 355), text="设置", command=lambda: settings.settingsGUI(root))
+settings_button = maliang.Button(cv, (130, 355), text="设置", command=lambda: settingsGUI.main_window(1, root))
 
 
 logger.info("EECT准备就绪，进入主循环")

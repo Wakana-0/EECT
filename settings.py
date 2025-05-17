@@ -111,5 +111,19 @@ def settingsGUI(window):
     save_btn = maliang.Button(settings_window_cv, (200, 250), text="保存更改", command=on_save)
 '''
 
+
+def set_color(mode):
+    if mode == 0:
+        theme.set_color_mode("system")
+    elif mode == 1:
+        theme.set_color_mode("dark")
+    else:
+        theme.set_color_mode("light")
+
+
+def main():
+    settingsGUI.main_window()
+
+
 if __name__ == "__main__":
     settingsGUI.main_window()
