@@ -1,5 +1,5 @@
 import maliang
-from maliang import theme, animation
+from maliang import animation
 from loguru import logger
 import settings
 
@@ -33,7 +33,7 @@ def main_window(window=0, top=None):
     else:
         logger.info("创建窗口 root")
         root = maliang.Toplevel(top, size=(750, 450), icon="./img/EECT_logo.ico")
-        root.center()
+        root.geometry(position=(root.winfo_screenwidth() // 2 - root.size[0] // 2, root.winfo_screenheight() // 2 - root.size[1] // 2))    # 居中窗口
         root_cv = maliang.Canvas(root, auto_zoom=False)
         menu_cv = maliang.Canvas(root, auto_zoom=False)
         menu_cv.place(width=100, height=450)
@@ -67,4 +67,4 @@ def settings_appearance(cv):
 
     title = maliang.Text(cv, (20, 20), text="外观设置", fontsize=26)
     color_mode_text = maliang.Text(cv, (20, 90), text="设置颜色模式")
-    color_mode = maliang.SegmentedButton(cv, (20, 130), text=("跟随系统", "深色", "浅色"), default=0, command=lambda i:settings.set_color(color_mode.get()))
+    color_mode = maliang.SegmentedButton(cv, (20, 130), text=("跟随系统", "深色", "浅色"), default=int(settings.get_value("appearance.color_mode")), command=lambda i: settings.set_color_mode(color_mode.get()))

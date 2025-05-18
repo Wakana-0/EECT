@@ -1,7 +1,18 @@
-
-# 使用缓存
 Cache = true
-# 体验功能
 ExperienceTheFeatures = false
-# 使用与注册表相关的功能
+UseRegistry = true
+
+[appearance]
+color_mode = 0
+
+[storage]
+cache = true
+
+[update]
+url = "https://raw.githubusercontent.com/EECT/EECT_update/refs/heads/main/update.toml"
+download_source = "0"
+update_channel = "0"
+
+[senior]
+ExperienceTheFeatures = false
 UseRegistry = true

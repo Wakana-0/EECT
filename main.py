@@ -80,6 +80,14 @@ except KeyError as e:
     logger.info("程序退出")
     exit(0)
 
+
+def update_exe():
+    try:
+        os.startfile(".\\EECT-Update.exe")
+    except FileNotFoundError:
+        messagebox.showerror("组件错误", "无法打开“EECT更新组件”。\n此EECT没有附带“EECT更新组件 (EECT-Update.exe)。")
+
+
 logger.info("创建窗口 root")
 size = 600, 400
 toplevel_size = 430, 350
@@ -90,6 +98,10 @@ root.center()
 root.title("EECT")
 root.resizable(False, False)
 root.at_exit(command=lambda: EECT_exit())
+logger.info("设置颜色模式")
+color_modes = {"0": "system", "1": "dark", "2": "light"}
+theme.set_color_mode(color_modes[str(settings.get_value("appearance.color_mode"))])
+
 if ExperienceTheFeatures:
     logger.info("EECT已启用体验功能")
     root.title("EECT - 已启用体验功能")
@@ -118,6 +130,7 @@ def About():
     About_title = maliang.Text(About_cv, (20, 20), text="EECT", fontsize=40)
     About_text = maliang.Text(About_cv, (20, 100), text=f"Version：{current_version}\nVersion code：{current_version_code}")
     update = maliang.Button(About_cv, (20, 165), text="检查更新", command=about.pull_up_the_update)
+    EECT__update = maliang.Button(About_cv, (20, 225), text="启动“EECT更新组件”", command=update_exe)
 
     About_sidebar_text = maliang.Text(About_sidebar_cv, (0, 20), text="更多信息∨", fontsize=20)
     List_of_developers = maliang.UnderlineButton(About_sidebar_cv, (0, 70), text="贡献者名单", fontsize=16, command=lambda: webbrowser.open_new("https://github.com/EECT/EECT/graphs/contributors"))

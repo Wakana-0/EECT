@@ -1,128 +1,224 @@
-import maliang
-from maliang import theme
 import tomllib
 import os
 from loguru import logger
+import tomli_w
+from maliang import theme
 
 import settingsGUI
 
-config = None
+# 全局配置变量
+_config = None
+_config_path = './config/config.toml'
+
+
+def _ensure_config_dir():
+    """确保配置目录存在"""
+    os.makedirs(os.path.dirname(_config_path) or '.', exist_ok=True)
+
+
+def load_config():
+    """
+    加载配置文件
+    如果文件不存在，创建默认配置
+    返回: 配置字典
+    """
+    global _config
+
+    try:
+        logger.info(f"尝试加载配置文件: {_config_path}")
+        with open(_config_path, 'rb') as f:
+            _config = tomllib.load(f)
+        logger.info("配置文件加载成功")
+        return _config
+    except FileNotFoundError:
+        logger.info("配置文件不存在，创建默认配置")
+        _ensure_config_dir()
+
+        default_config = {
+            "Cache": True,
+            "ExperienceTheFeatures": False,
+            "UseRegistry": True,
+            "appearance": {"color_mode": 0},
+            "storage": {"cache": True},
+            "update": {
+                "url": "https://raw.githubusercontent.com/EECT/EECT_update/refs/heads/main/update.toml",
+                "download_source": "0",
+                "update_channel": "0"
+            },
+            "senior": {
+                "ExperienceTheFeatures": False,
+                "UseRegistry": True
+            }
+        }
+
+        with open(_config_path, 'wb') as f:
+            tomli_w.dump(default_config, f)
+
+        _config = default_config
+        return _config
+    except Exception as e:
+        logger.error(f"加载配置文件失败: {e}")
+        raise
 
 
 def get_config():
-    logger.info("调用 get_config 函数")
-    logger.info("声明全局变量 config")
-    global config
+    """
+    获取当前配置
+    如果尚未加载，则先加载配置
+    返回: 配置字典
+    """
+    global _config
+
+    if _config is None:
+        return load_config()
+
+    return _config
+
+
+def save_config():
+    """
+    保存当前配置到文件
+    """
+    global _config
+
+    if _config is None:
+        raise ValueError("配置未加载，无法保存")
+
     try:
-        logger.info("尝试读取配置文件 ./config/config.toml")
-        with open('./config/config.toml', 'rb') as f:
-            config = tomllib.load(f)
-            ExperienceTheFeatures = config['ExperienceTheFeatures']
-            Cache = config['Cache']
-            UseRegistry = config['UseRegistry']
-            logger.info("读取配置文件成功，返回 ache, ExperienceTheFeatures, UseRegistry")
-            return Cache, ExperienceTheFeatures, UseRegistry
-    except FileNotFoundError:
-        logger.info("配置文件不存在，创建默认配置文件")
-        # 创建默认配置文件
-        default_config = """
-# 使用缓存
-Cache = true
-# 体验功能
-ExperienceTheFeatures = false
-# 使用与注册表相关的功能
-UseRegistry = true
-"""
-        os.makedirs('./config', exist_ok=True)
-        with open('./config/config.toml', 'w', encoding="utf-8") as f:
-            f.write(default_config)
-        config = tomllib.loads(default_config)
-        logger.info("创建默认配置文件成功")
+        logger.info(f"保存配置到: {_config_path}")
+        with open(_config_path, 'wb') as f:
+            tomli_w.dump(_config, f)
+        logger.info("配置保存成功")
+        return True
+    except Exception as e:
+        logger.error(f"保存配置失败: {e}")
+        return False
 
 
+def get_value(key_path):
+    """
+    获取配置值
+    :param key_path: 键路径，如 "ExperienceTheFeatures" 或 "appearance.color_mode"
+    :return: 对应的值
+    """
+    config = get_config()
 
-def save_config(cache_val, exp_val, reg_val):
-    logger.info("调用 save_config 函数")
-    """保存新的配置到文件"""
-    new_config = f"""
-# 使用缓存
-Cache = {str(cache_val).lower()}
-# 体验功能
-ExperienceTheFeatures = {str(exp_val).lower()}
-# 使用与注册表相关的功能
-UseRegistry = {str(reg_val).lower()}
-"""
-    logger.info("尝试保存配置到文件 ./config/config.toml")
-    with open('./config/config.toml', 'w', encoding="utf-8") as f:
-        f.write(new_config)
-    logger.info("保存配置成功")
+    keys = key_path.split('.')
+    current = config
 
-'''
-def settingsGUI(window):
-    logger.info("调用 settingsGUI 函数")
-    logger.info("创建窗口 settings_window")
-    settings_window = maliang.Toplevel(window, size=(500, 350), icon="./img/EECT_logo.ico")
-    settings_window.center()
-    settings_window_cv = maliang.Canvas(settings_window, auto_zoom=False)
-    settings_window_cv.place(width=600, height=350)
-    settings_window.title("设置")
-    settings_window.resizable(False, False)
-
-    # 获取初始配置
-    logger.info("获取初始配置")
-    cache_val, exp_val, reg_val = get_config()
-
-    # GUI界面
-    logger.info("创建设置界面")
-    settings_text = maliang.Text(settings_window_cv, (20, 20), text="设置 - 所有设置均在重启软件后生效")
-
-    # 创建开关控件并保存引用
-    cache_switch = maliang.Switch(settings_window_cv, (10, 60))
-    cache_switch.set(cache_val)
-    maliang.Text(settings_window_cv, (80, 60), text="使用缓存")
-
-    exp_switch = maliang.Switch(settings_window_cv, (10, 110))
-    exp_switch.set(exp_val)
-    maliang.Text(settings_window_cv, (80, 110), text="体验功能")
-
-    reg_switch = maliang.Switch(settings_window_cv, (10, 160))
-    reg_switch.set(reg_val)
-    maliang.Text(settings_window_cv, (80, 160), text="使用注册表相关功能")
-    
-    # 添加保存按钮
-    def on_save():
-        logger.info("调用 on_save 函数")
-        new_cache = cache_switch.get()
-        new_exp = exp_switch.get()
-        new_reg = reg_switch.get()
-        save_config(new_cache, new_exp, new_reg)
-
-        save_tip = maliang.Toplevel(settings_window, size=(300, 70), title="已保存你所做出的更改")
-        theme.customize_window(save_tip, hide_button="maxmin")
-        save_tip.toolwindow(True)
-        save_tip.topmost(True)
-        save_tip.center()
-        save_tip_cv = maliang.Canvas(save_tip, auto_zoom=False)
-        save_tip_cv.place(width=300, height=70)
-
-        save_tip_text = maliang.Text(save_tip_cv, (40, 10), text="所有更改都已经保存，\n但重启软件后更改才会生效。", fontsize=16)
+    try:
+        for k in keys:
+            current = current[k]
+        return current
+    except (KeyError, TypeError) as e:
+        logger.error(f"获取配置值失败: {e}")
+        raise KeyError(f"键路径 '{key_path}' 不存在")
 
 
-    save_btn = maliang.Button(settings_window_cv, (200, 250), text="保存更改", command=on_save)
-'''
+def set_value(key_path, value):
+    """
+    设置配置值
+    :param key_path: 键路径，如 "ExperienceTheFeatures" 或 "appearance.color_mode"
+    :param value: 要设置的值
+    """
+    config = get_config()
+
+    keys = key_path.split('.')
+    current = config
+
+    try:
+        # 遍历到目标键的前一级
+        for k in keys[:-1]:
+            if k not in current:
+                current[k] = {}
+            current = current[k]
+
+        # 设置值
+        current[keys[-1]] = value
+        logger.info(f"设置配置值: {key_path} = {value}")
+    except (KeyError, TypeError) as e:
+        logger.error(f"设置配置值失败: {e}")
+        raise KeyError(f"键路径 '{key_path}' 无效")
 
 
-def set_color(mode):
-    if mode == 0:
-        theme.set_color_mode("system")
-    elif mode == 1:
-        theme.set_color_mode("dark")
+def modify_config(key_path=None, new_value=None, **kwargs):
+    """
+    修改配置
+    可以通过 key_path 和 new_value 直接修改，或者通过 kwargs 修改多个值
+    """
+    if key_path is not None and new_value is not None:
+        set_value(key_path, new_value)
+    elif kwargs:
+        for k, v in kwargs.items():
+            set_value(k, v)
     else:
-        theme.set_color_mode("light")
+        raise ValueError("必须提供 key_path 和 new_value 或者 kwargs")
+
+    # 保存修改
+    save_config()
 
 
-def main():
-    settingsGUI.main_window()
+def get_cache():
+    """获取缓存设置"""
+    return get_value("Cache")
+
+
+def set_cache(value):
+    """设置缓存设置"""
+    set_value("Cache", value)
+    # 自动保存
+    save_config()
+
+
+def get_experience_features():
+    """获取体验功能设置"""
+    return get_value("ExperienceTheFeatures")
+
+
+def set_experience_features(value):
+    """设置体验功能设置"""
+    set_value("ExperienceTheFeatures", value)
+    # 自动保存
+    save_config()
+
+
+def get_use_registry():
+    """获取注册表功能设置"""
+    return get_value("UseRegistry")
+
+
+def set_use_registry(value):
+    """设置注册表功能设置"""
+    set_value("UseRegistry", value)
+    # 自动保存
+    save_config()
+
+
+def set_color_mode(mode):
+    """
+    设置颜色模式
+    :param mode: 0-系统, 1-深色, 2-浅色
+    """
+    color_modes = {"0": "system", "1": "dark", "2": "light"}
+    theme.set_color_mode(color_modes[str(mode)])
+
+    if str(mode) not in color_modes:
+        raise ValueError("无效的颜色模式")
+
+    # 确保 appearance 部分存在
+    config = get_config()
+    if "appearance" not in config:
+        config["appearance"] = {}
+
+    config["appearance"]["color_mode"] = mode
+    _config = config  # 更新全局配置
+
+    # 保存配置
+    save_config()
+
+
+# 初始化加载配置
+load_config()
 
 
 if __name__ == "__main__":

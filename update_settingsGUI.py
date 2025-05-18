@@ -23,13 +23,13 @@ def main_window():
 
 
 def settings_main(cv):
-    logger.info("切换界面")
+    logger.info("设置-更新")
     cv.clear()
 
     cv.place(width=650, height=450, x=100, y=40)
     animation.MoveTkWidget(cv, (0, -40), 200, fps=60).start(delay=50)
 
-    title = maliang.Text(cv, (20, 20), text="更新设置", fontsize=26)
+    title = maliang.Text(cv, (20, 20), text="更新设置（演示界面）", fontsize=26)
 
     update_channel_choose_text = maliang.Text(cv, (20, 80), text="更新频道选择")
     update_channel_choose = maliang.OptionButton(cv, (20, 120), text=("正式版（推荐，包含bug修复和新功能，稳定性高）", "测试版（包含最新bug修复或新功能，稳定性较低）"), default=update_channel)
