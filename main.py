@@ -85,7 +85,7 @@ def update_exe():
     try:
         os.startfile(".\\EECT-Update.exe")
     except FileNotFoundError:
-        messagebox.showerror("组件错误", "无法打开“EECT更新组件”。\n此EECT没有附带“EECT更新组件 (EECT-Update.exe)。")
+        messagebox.showerror("组件错误", "无法打开“EECT更新组件”。\n此EECT没有附带“EECT更新组件” (EECT-Update.exe)。")
 
 
 logger.info("创建窗口 root")
@@ -311,6 +311,9 @@ if ExperienceTheFeatures:
 
 home_button5 = maliang.Button(cv, (20, 355), text="    关于    ", command=About)
 settings_button = maliang.Button(cv, (130, 355), text="设置", command=lambda: settingsGUI.main_window(1, root))
+
+
+beta_tips = maliang.Label(cv, (330, 340), text="你正在使用的是EECT的Beta版本！\nVersion: 1.1.0.0-b1 (250521)", fontsize=16)
 
 
 logger.info("EECT准备就绪，进入主循环")
