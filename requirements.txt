@@ -7,3 +7,4 @@ hPyT==1.3.2
 darkdetect==0.8.0
 win32material==1.0.7
 loguru==0.7.3
+tomli-w==1.2.0
