@@ -18,21 +18,6 @@ import about
 import reg
 import settings
 
-# 创建logs目录，如果不存在
-log_dir = 'logs'
-if not os.path.exists(log_dir):
-    os.makedirs(log_dir)
-
-# 获取当前日期和时间yyyy-mm-dd HH:MM:SS
-time_now = datetime.datetime.now().strftime("%Y-%m-%d %H`%M`%S")
-# 设置日志文件名为当前日期和时间
-log_file_name = f"{time_now}.log"
-log_file_path = os.path.join(log_dir, log_file_name)
-
-# 配置日志
-logger.add(log_file_path, level='DEBUG', format='{time:YYYY-MM-DD HH:mm:ss} | {level} | {file}:{line} | {module} | {message}')
-
-logger.info("EECT启动")
 
 # 创建logs目录，如果不存在
 log_dir = 'logs'

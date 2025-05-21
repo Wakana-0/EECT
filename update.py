@@ -1,5 +1,6 @@
 import requests
 import tomllib
+
 from packaging import version
 from loguru import logger
 import traceback
