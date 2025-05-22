@@ -301,7 +301,7 @@ home_button5 = maliang.Button(cv, (20, 355), text="    关于    ", command=Abou
 settings_button = maliang.Button(cv, (130, 355), text="设置", command=lambda: settingsGUI.main_window(1, root))
 
 
-beta_tips = maliang.Label(cv, (330, 340), text="你正在使用的是EECT的Beta版本！\nVersion: 1.1.0.0-b1 (250521)", fontsize=16)
+beta_tips = maliang.Label(cv, (423, 350), text="你正在使用的是EECT的Beta版本！\nVersion: 1.1.0.0-b1 (250520)", fontsize=10)
 
 
 logger.info("EECT准备就绪，进入主循环")

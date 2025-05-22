@@ -201,6 +201,7 @@ def set_color_mode(mode):
     """
     color_modes = {"0": "system", "1": "dark", "2": "light"}
     theme.set_color_mode(color_modes[str(mode)])
+    logger.info(f"切换主题至{color_modes[str(mode)]}")
 
     if str(mode) not in color_modes:
         raise ValueError("无效的颜色模式")
