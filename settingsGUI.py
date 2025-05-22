@@ -60,7 +60,7 @@ def settings_home(cv):
     cv.place(width=650, height=450, x=100, y=40)
     animation.MoveTkWidget(cv, (0, -40), 200, fps=60).start(delay=50)
     title = maliang.Text(cv, (270, 20), text="EECT设置", fontsize=26)
-    id = random.randint(1, 8)
+    id = random.randint(1, 10)
     with open("./config/FamousQuotes.toml", 'rb') as f:
         famous_quotes = tomllib.load(f)
     text = famous_quotes[str(id)]
