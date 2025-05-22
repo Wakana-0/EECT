@@ -8,7 +8,8 @@ import tomllib
 import webbrowser
 from loguru import logger
 import traceback
-import requests
+
+import requests, packaging, psutil, tomli_w
 
 # 自制模块
 import err
