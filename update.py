@@ -1,12 +1,10 @@
-import requests
-import tomllib
-
-from packaging import version
-from loguru import logger
-import traceback
-import err
-import zipfile
 import os
+import tomllib
+import traceback
+import zipfile
+import requests
+from loguru import logger
+from packaging import version
 
 
 # 获取更新配置
@@ -16,43 +14,91 @@ def get_update_config():
     with open('./config/update_config.toml', 'rb') as f:
         update_config = tomllib.load(f)
         url = update_config['url']
-    return url
+        beta_url = update_config['beta_url']
+        update_channel = update_config['update_channel']
+    return url, beta_url, update_channel
 
 
 # 检查更新
 def check_update():
+    logger.info("调用函数 check_update")
     # 检查是否有更新
-    url = get_update_config()
-    response = requests.get(url, verify=False)  # verify=False用于忽略SSL证书验证
-    try:
-        data = response.text
-        data = tomllib.loads(data)
+    logger.info("开始检查更新")
+    # 从指定更新通道检查更新
+    if get_update_config()[2] == "0":
+        logger.info("使用正式版更新通道")
+        url = get_update_config()[0]  # 获取最新正式版
+        response = requests.get(url, verify=False)  # verify=False用于忽略SSL证书验证
+        try:
+            logger.info("解析数据")
+            data = response.text
+            logger.info(f"获得的原始数据：\n{data}")
+            data = tomllib.loads(data)
 
-        new_version = data['version']
-        version_code = data['version_code']
-        date = data['date']
-        changelog = data['changelog']
-        importance = data['importance']
-        zip_name = data['file_name']
-        url = data['download_url']
-        return new_version, version_code, date, changelog, importance, zip_name, url
-    except Exception:
-        err.show_error(traceback.format_exc(), 0)
-        print(response.status_code)
-        with open('./config/update.toml', 'rb') as f:
-            update_data = tomllib.load(f)
-            new_version = update_data['version']
-            version_code = update_data['version_code']
-            date = update_data['date']
-            changelog = update_data['changelog']
-            importance = update_data['importance']
-            zip_name = update_data['file_name']
-            url = update_data['download_url']
+            new_version = data['version']
+            version_code = data['version_code']
+            date = data['date']
+            changelog = data['changelog']
+            importance = data['importance']
+            zip_name = data['file_name']
+            url = data['download_url']
             return new_version, version_code, date, changelog, importance, zip_name, url
+        except Exception:
+            logger.error(
+                f"解析数据时出错。HTTP状态码：{response.status_code}\n\n堆栈信息：\n{traceback.format_exc()}\n\n获得的原始数据：\n{response.text}")
+            print(
+                f"解析数据时出错。HTTP状态码：{response.status_code}\n\n堆栈信息：\n{traceback.format_exc()}\n\n获得的原始数据：\n{response.text}")
+            logger.info("使用本地数据")
+            with open('./config/update.toml', 'rb') as f:
+                update_data = tomllib.load(f)
+                new_version = update_data['version']
+                version_code = update_data['version_code']
+                date = update_data['date']
+                changelog = update_data['changelog']
+                importance = update_data['importance']
+                zip_name = update_data['file_name']
+                url = update_data['download_url']
+                return new_version, version_code, date, changelog, importance, zip_name, url
+
+    else:
+        logger.info("使用Beta版更新通道")
+        url = get_update_config()[1]  # 获取最新Beta
+        response = requests.get(url, verify=False)  # verify=False用于忽略SSL证书验证
+        try:
+            logger.info("解析数据")
+            data = response.text
+            logger.info(f"获得的原始数据：\n{data}")
+            data = tomllib.loads(data)
+
+            new_version = data['version']
+            version_code = data['version_code']
+            date = data['date']
+            changelog = data['changelog']
+            importance = data['importance']
+            zip_name = data['file_name']
+            url = data['download_url']
+            return new_version, version_code, date, changelog, importance, zip_name, url
+        except Exception:
+            logger.error(
+                f"解析数据时出错。HTTP状态码：{response.status_code}\n\n堆栈信息：\n{traceback.format_exc()}\n\n获得的原始数据：\n{response.text}")
+            print(
+                f"解析数据时出错。HTTP状态码：{response.status_code}\n\n堆栈信息：\n{traceback.format_exc()}\n\n获得的原始数据：\n{response.text}")
+            logger.info("使用本地数据")
+            with open('./config/update.toml', 'rb') as f:
+                update_data = tomllib.load(f)
+                new_version = update_data['version']
+                version_code = update_data['version_code']
+                date = update_data['date']
+                changelog = update_data['changelog']
+                importance = update_data['importance']
+                zip_name = update_data['file_name']
+                url = update_data['download_url']
+                return new_version, version_code, date, changelog, importance, zip_name, url
 
 
-
-def check_version(value):   # 检查当前程序版本
+def check_version(value):  # 检查当前程序版本
+    logger.info("调用函数 check_version")
+    logger.info("获取当前程序版本")
     # 检查版本
     with open('./config/version.toml', 'rb') as f:
         version_data = tomllib.load(f)
@@ -75,6 +121,7 @@ def compare_versions(current_version, update_version):
 
 
 def update():
+    logger.info("调用函数 update")
     # 检查更新
     new_version, version_code, date, changelog, importance, zip_name, url = check_update()
     if new_version is None:
@@ -90,10 +137,15 @@ def update():
     print(f"文件名: {zip_name}")
     compare_ver = compare_versions(check_version(1), new_version)
     print("对比版本号", compare_ver)
+    logger.info("版本信息：\n最新版本：%s\n版本号：%s\n发布日期：%s\n更新日志：%s\n重要性：%s\n下载链接：%s\n文件名：%s" % (
+    new_version, version_code, date, changelog, importance, url, zip_name))
     return compare_ver, new_version, version_code, date, changelog, importance, zip_name, url
 
 
 def unzip_file(zip_path, extract_to):
+    logger.info("调用函数 unzip_file")
+    logger.info(f"准备解压文件，从{zip_path}解压到{extract_to}")
+    print(f"准备解压文件，从{zip_path}解压到{extract_to}")
     """
     解压 .zip 文件到指定目录
 
@@ -104,6 +156,7 @@ def unzip_file(zip_path, extract_to):
         # 检查 zip 文件是否存在
         if not os.path.exists(zip_path):
             logger.error(f"解压文件不存在: {zip_path}")
+            print(f"找不到需要解压的文件：{zip_path}")
             return False
 
         # 检查目标目录是否存在，不存在则创建
@@ -114,13 +167,15 @@ def unzip_file(zip_path, extract_to):
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
             zip_ref.extractall(extract_to)
             logger.info(f"成功解压 {zip_path} 到 {extract_to}")
+            print("解压完成")
             return True
 
     except zipfile.BadZipFile:
         logger.error(f"文件不是有效的 .zip 文件: {zip_path}")
+        print("解压失败，文件不是有效的 .zip 文件")
     except Exception as e:
         logger.error(f"解压失败: {e}")
-        err.show_error(traceback.format_exc(), 0)
+        print(f"解压失败: {e}")
     return False
 
 
@@ -132,12 +187,11 @@ if __name__ == '__main__':
     else:
         print("没有新版本可用！")
 
-
 """
 cw保佑
-                                                                      
-                                                                      
-                                                                      
+
+
+
                                                 ..:---:.              
                                      .::-=+**#%%@@@@@@@@#:            
                          .::-=++*##%%@@@@@@@@@@@@@@@@@@@@@:           
@@ -167,6 +221,6 @@ cw保佑
 =@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%%#+.      
  :#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%=:::.         
     :------------------------------------------------:.               
-                                                                      
-                                                                      
+
+
                                                                       """
