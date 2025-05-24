@@ -9,7 +9,9 @@ import webbrowser
 from loguru import logger
 import traceback
 
-import requests, psutil, tomli_w
+import requests
+import psutil
+import tomli_w
 from packaging import version
 
 # 自制模块
