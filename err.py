@@ -2,12 +2,13 @@ import maliang
 from maliang import theme
 from loguru import logger
 import webbrowser
+import winsound
 
 
 def show_error(message, level):
     """显示错误信息"""
     logger.error("调用函数 show_error")
-
+    winsound.PlaySound("C:\\Windows\\Media\\Windows Foreground.wav", winsound.SND_ASYNC)  # 播放提示音
     error = maliang.Tk(size=(600, 400), icon="./img/EECT_logo.ico")
     error.center()
     error.title("EECT错误")

@@ -20,6 +20,7 @@ import FindGames
 import about
 import reg
 import settings
+import dialog
 
 
 # 创建logs目录，如果不存在
@@ -88,14 +89,14 @@ root.resizable(False, False)
 root.at_exit(command=lambda: EECT_exit())
 logger.info("设置颜色模式")
 color_modes = {"0": "system", "1": "dark", "2": "light"}
-theme.set_color_mode(color_modes[str(settings.get_value("appearance.color_mode"))])
+theme.set_color_mode(color_modes[str(settings.get_value("appearance.color_mode"))])    # type: ignore
 
 if ExperienceTheFeatures:
     logger.info("EECT已启用体验功能")
     root.title("EECT - 已启用体验功能")
 
 
-# TODO: 这他妈写的太乱了，记得找个时间重构
+# TODO: 重构 重构 重构 重构 重构……
 
 
 def EECT_exit():
@@ -302,6 +303,8 @@ settings_button = maliang.Button(cv, (130, 355), text="设置", command=lambda: 
 
 
 beta_tips = maliang.Label(cv, (423, 350), text="你正在使用的是EECT的Beta版本！\nVersion: 1.1.0.0-b1 (250520)", fontsize=10)
+
+dialog.tips(root, "Tips!", "Beta版本提醒", "当前正在使用的EECT是测试版，程序稳定性和功能完整性\n欠缺，不建议将此版本当作正式版使用。")
 
 
 logger.info("EECT准备就绪，进入主循环")
