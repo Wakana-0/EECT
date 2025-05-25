@@ -231,7 +231,7 @@ def find_games_toplevel():
                 f.write("")
 
         logger.info(f"写入缓存数据: ./cache/查找游戏-{current_time}.txt")
-        with open(f"/cache/查找游戏-{current_time}.txt", "w", encoding="utf-8") as f:
+        with open(f"./cache/查找游戏-{current_time}.txt", "w", encoding="utf-8") as f:
             f.write("查找游戏结果：\n")
             for game_name, game_path in data:
                 f.write(f"{game_name}: {game_path}\n")
