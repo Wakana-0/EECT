@@ -2,12 +2,13 @@ import maliang
 from maliang import theme
 from loguru import logger
 import webbrowser
+import winsound
 
 
 def show_error(message, level):
     """显示错误信息"""
     logger.error("调用函数 show_error")
-
+    winsound.PlaySound("C:\\Windows\\Media\\Windows Foreground.wav", winsound.SND_ASYNC)  # 播放提示音
     error = maliang.Tk(size=(600, 400), icon="./img/EECT_logo.ico")
     error.center()
     error.title("EECT错误")
@@ -17,7 +18,8 @@ def show_error(message, level):
 
     error_cv = maliang.Canvas(error, auto_zoom=False)
     error_cv.place(width=600, height=400)
-    error_title = maliang.Text(error_cv, (5, 10), text="EECT出现了一些错误", fontsize=24)
+    img = maliang.Image(error_cv, (15, 5), image=maliang.PhotoImage(file="./img/error.png").resize(45, 45))
+    error_title = maliang.Text(error_cv, (70, 10), text="EECT出现了一些错误", fontsize=24)
     error_text = maliang.Text(error_cv, (5, 60), text=message, fontsize=14, family="Microsoft Yahei UI")
     tips = maliang.Text(error_cv, (5, 300), text="请尝试重新启动程序或者忽略错误（如果不影响使用的话）。\n如果你认为这是一个bug，那么请点击“反馈问题”", fontsize=16)
 
