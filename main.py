@@ -4,8 +4,6 @@ from maliang import theme
 from tkinter import messagebox
 import os
 import datetime
-import tomllib
-import webbrowser
 from loguru import logger
 import traceback
 
@@ -14,15 +12,8 @@ import psutil
 import tomli_w
 from packaging import version
 
-# 自制模块
-import err
-import settingsGUI
-import shutdown
-import FindGames
-import about
-import reg
-import settings
-import dialog
+
+version = 1
 
 
 # 创建logs目录，如果不存在
@@ -42,36 +33,6 @@ logger.add(log_file_path, level='DEBUG', format='{time:YYYY-MM-DD HH:mm:ss} | {l
 logger.info("EECT启动")
 
 
-logger.info("EECT正在读取配置文件: ./config/config.toml")
-# 读取配置文件
-with open('./config/config.toml', 'rb') as f:
-    config = tomllib.load(f)
-    try:
-        ExperienceTheFeatures = config['ExperienceTheFeatures']
-        Cache = config['Cache']
-        UseRegistry = config['UseRegistry']
-    except KeyError as e:
-        ExperienceTheFeatures = False
-        err.show_error(traceback.format_exc(), 0)
-        logger.error(f"读取配置文件时错误，堆栈信息：\n{traceback.format_exc()}")
-
-
-try:
-    logger.info("EECT正在读取版本信息: ./config/version.toml")
-    with open('./config/version.toml', 'rb') as f:
-        version = tomllib.load(f)
-    current_version = version['version']
-    current_version_code = version['version_code']
-except FileNotFoundError as e:
-    logger.error(f"EECT无法读取版本信息，堆栈信息：\n{traceback.format_exc()}")
-    err.show_error(traceback.format_exc(), 0)
-except KeyError as e:
-    logger.error(f"EECT无法读取版本信息，堆栈信息：\n{traceback.format_exc()}")
-    err.show_error(traceback.format_exc(), 1)
-    logger.info("程序退出")
-    exit(0)
-
-
 def update_exe():
     try:
         os.startfile(".\\EECT-Update.exe")
@@ -79,6 +40,21 @@ def update_exe():
         messagebox.showerror("组件错误", "无法打开“EECT更新组件”。\n此EECT没有附带“EECT更新组件” (EECT-Update.exe)。")
 
 
+logger.info("导入核心模块")
+import core
+logger.info("导入基本模块")
+import err
+
+logger.info("检查核心版本")
+if core.version() < 1:
+    logger.error(f"核心版本过低，无法继续运行。当前核心版本: {core.version()}, 应用程序支持的最低版本: 1")
+    err.show_error(f"核心版本过低，应用程序不支持此核心，请 更新 或 下载最新版本 的EECT解决此问题。\n核心版本: {core.version()}\n应用程序支持的最低版本: 1\n\n操作建议：更新或下载最新版本的EECT、关闭程序。", 1)
+    exit(0)
+
+logger.info("core")
+core.mian()
+
+'''
 logger.info("创建窗口 root")
 size = 600, 400
 toplevel_size = 430, 350
@@ -310,4 +286,4 @@ dialog.tips(root, "Tips!", "Beta版本提醒", "当前正在使用的EECT是测�
 
 
 logger.info("EECT准备就绪，进入主循环")
-root.mainloop()
+root.mainloop()'''
