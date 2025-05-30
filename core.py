@@ -8,7 +8,7 @@ import err
 
 
 def version():
-    return 0
+    return 1
 
 
 def mian():
