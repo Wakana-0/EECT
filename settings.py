@@ -187,6 +187,20 @@ def get_use_registry():
     return get_value("UseRegistry")
 
 
+def get_color_mode():
+    """
+    获取颜色模式
+    返回: 0-系统, 1-深色, 2-浅色
+    """
+    color_modes = {"0": "system", "1": "dark", "2": "light"}
+    mode = get_value("appearance.color_mode")
+    if str(mode) not in color_modes:
+        raise ValueError("无效的颜色模式")
+    mode = color_modes[str(mode)]
+    return mode
+
+
+
 def set_use_registry(value):
     """设置注册表功能设置"""
     set_value("UseRegistry", value)

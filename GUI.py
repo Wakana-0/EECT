@@ -1,5 +1,5 @@
 import maliang
-from maliang import animation
+from maliang import animation, theme
 from loguru import logger
 import os
 import random
@@ -8,6 +8,7 @@ import tomllib
 import update_settingsGUI
 import shutdown
 import reg
+import settings
 
 
 def menu_controls(value, cv):
@@ -23,6 +24,7 @@ def menu_controls(value, cv):
 
 
 def main_window(window=0, top=None):
+    theme.set_color_mode(settings.get_color_mode())
     if window == 0:
         logger.info("创建窗口 root")
         root = maliang.Tk(size=(750, 450), icon="./img/EECT_logo.ico")

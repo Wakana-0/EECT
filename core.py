@@ -1,6 +1,7 @@
 from loguru import logger
 import tomllib
 import traceback
+import platform
 
 logger.info("加载EECT核心必要模块")
 import GUI
@@ -15,6 +16,8 @@ def mian():
     read_config()
     GUI.main_window()
 
+
+# -----配置文件区-----
 
 def read_config():    # 读取配置文件
     logger.info("EECT正在读取配置文件: ./config/config.toml")
@@ -44,3 +47,14 @@ def read_config():    # 读取配置文件
         err.show_error(traceback.format_exc(), 1)
         logger.info("程序退出")
         exit(0)
+
+
+# -----系统信息区-----
+
+def system_basic_information():
+    # 系统类型、版本和架构
+    os_type = platform.system()
+    os_version = platform.version()
+    machine_arch = platform.machine()
+
+    return os_type, os_version, machine_arch    # 返回 系统类型、版本、架构
