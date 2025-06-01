@@ -64,9 +64,7 @@ jobs:
           config=config
         enable-plugins: tk-inter
         windows-console-mode: attach
-        nofollow-import-to: about, FindGames, err, shutdown, reg, settings, dialog, settingsGUI, update, update_settingsGUI, update_settings, GUI, core
-
-    - name: Zip the build artifact
+        nofollow-import-to: core, GUI, about, FindGames, err, shutdown, reg, settings, dialog, settingsGUI, update, update_settingsGUI, update_settings
       run: |
         dir '.\build\main.dist\*'
         Compress-Archive -Path '.\build\main.dist\*' -DestinationPath 'EECT_build-windows-latest.zip' -Force
