@@ -3,6 +3,7 @@ import tomllib
 import traceback
 import platform
 import wmi
+import ctypes
 
 logger.info("加载EECT核心必要模块")
 import GUI
@@ -72,3 +73,11 @@ def RAM_info():
     memory_size = int(os_mem.TotalVisibleMemorySize) / 1024 / 1024  # 总内存大小
 
     return memory_size    # 返回 总内存大小（GB）
+
+
+def display_info():
+    user32 = ctypes.windll.user32
+    width = user32.GetSystemMetrics(0)  # 获取屏幕宽度
+    height = user32.GetSystemMetrics(1)  # 获取屏幕高度
+
+    return f"{width}x{height}"    # 返回当前使用的屏幕分辨率（宽x高）

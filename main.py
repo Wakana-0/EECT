@@ -11,6 +11,7 @@ import requests
 import psutil
 import tomli_w
 from packaging import version
+import wmi
 
 
 version = 1
