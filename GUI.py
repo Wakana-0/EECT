@@ -10,6 +10,7 @@ import update_settingsGUI
 import shutdown
 import reg
 import settings
+import settingsGUI
 from update import check_version
 import about
 
@@ -38,7 +39,7 @@ def main_window(window=0, top=None):
         root_cv.place(width=650, height=450, x=200)
         root.title("EECT")
         root.resizable(False, False)
-        menu_bar(menu_cv, root_cv)
+        menu_bar(menu_cv, root_cv, root)
         auto_shutdown(root_cv)
         root.mainloop()
     else:
@@ -56,9 +57,10 @@ def main_window(window=0, top=None):
         root.mainloop()
 
 
-def menu_bar(cv, cv2):
+def menu_bar(cv, cv2, window):
     menu = maliang.SegmentedButton(cv, (0, 0), text=("定时关机               ", "Windows 工具      ", "修改任务栏            ", "系统信息               "), layout="vertical", default=0, command=lambda i:menu_controls(menu.get(), cv2))
-    about_button = maliang.Button(cv, (0, 400), text="            关于            ", command=lambda: About(cv2))
+    about_button = maliang.Button(cv, (0, 358), text="            关于            ", command=lambda: About(cv2))
+    settings_button = maliang.Button(cv, (0, 400), text="            设置            ", command=lambda: settingsGUI.main_window(1, window))
 
 
 def About(cv):
