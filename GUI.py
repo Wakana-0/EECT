@@ -13,6 +13,7 @@ import settings
 import settingsGUI
 from update import check_version
 import about
+import dialog
 
 
 def menu_controls(value, cv):
@@ -27,34 +28,21 @@ def menu_controls(value, cv):
             update_settingsGUI.settings_main(cv)
 
 
-def main_window(window=0, top=None):
+def main_window():
     theme.set_color_mode(settings.get_color_mode())
-    if window == 0:
-        logger.info("创建窗口 root")
-        root = maliang.Tk(size=(750, 450), icon="./img/EECT_logo.ico")
-        root.center()
-        root_cv = maliang.Canvas(root, auto_zoom=False)
-        menu_cv = maliang.Canvas(root, auto_zoom=False)
-        menu_cv.place(width=200, height=450)
-        root_cv.place(width=650, height=450, x=200)
-        root.title("EECT")
-        root.resizable(False, False)
-        menu_bar(menu_cv, root_cv, root)
-        auto_shutdown(root_cv)
-        root.mainloop()
-    else:
-        logger.info("创建窗口 root")
-        root = maliang.Toplevel(top, size=(850, 450), icon="./img/EECT_logo.ico")
-        root.geometry(position=(root.winfo_screenwidth() // 2 - root.size[0] // 2, root.winfo_screenheight() // 2 - root.size[1] // 2))    # 居中窗口
-        root_cv = maliang.Canvas(root, auto_zoom=False)
-        menu_cv = maliang.Canvas(root, auto_zoom=False)
-        menu_cv.place(width=200, height=450)
-        root_cv.place(width=650, height=450, x=200)
-        root.title("EECT")
-        root.resizable(False, False)
-        menu_bar(menu_cv, root_cv)
-        auto_shutdown(root_cv)
-        root.mainloop()
+    logger.info("创建窗口 root")
+    root = maliang.Tk(size=(750, 450), icon="./img/EECT_logo.ico")
+    root.center()
+    root_cv = maliang.Canvas(root, auto_zoom=False)
+    menu_cv = maliang.Canvas(root, auto_zoom=False)
+    menu_cv.place(width=200, height=450)
+    root_cv.place(width=650, height=450, x=200)
+    root.title("EECT")
+    root.resizable(False, False)
+    menu_bar(menu_cv, root_cv, root)
+    auto_shutdown(root_cv)
+    dialog.tips(root, "Tips!", "Beta版本提醒", "当前正在使用的EECT是测试版，程序稳定性和功能完整性\n欠缺，不建议将此版本当作正式版使用。")
+    root.mainloop()
 
 
 def menu_bar(cv, cv2, window):
