@@ -2,6 +2,7 @@ from loguru import logger
 import tomllib
 import traceback
 import platform
+import wmi
 
 logger.info("加载EECT核心必要模块")
 import GUI
@@ -52,9 +53,22 @@ def read_config():    # 读取配置文件
 # -----系统信息区-----
 
 def system_basic_information():
-    # 系统类型、版本和架构
-    os_type = platform.system()
-    os_version = platform.version()
-    machine_arch = platform.machine()
+    return platform.system(), platform.version(), platform.machine()    # 返回 系统类型、版本、架构
 
-    return os_type, os_version, machine_arch    # 返回 系统类型、版本、架构
+
+def cpu_info():
+    c = wmi.WMI()
+    for proc in c.Win32_Processor():
+        cpu_name = proc.Name
+        cpu_cores = proc.NumberOfCores
+        cpu_threads = proc.NumberOfLogicalProcessors
+
+        return cpu_name, cpu_cores, cpu_threads    # 返回 CPU名称、物理核心数、逻辑线程数
+
+
+def RAM_info():
+    c = wmi.WMI()
+    os_mem = c.Win32_OperatingSystem()[0]
+    memory_size = int(os_mem.TotalVisibleMemorySize) / 1024 / 1024  # 总内存大小
+
+    return memory_size    # 返回 总内存大小（GB）
