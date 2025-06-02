@@ -4,11 +4,14 @@ from loguru import logger
 import os
 import random
 import tomllib
+import webbrowser
 
 import update_settingsGUI
 import shutdown
 import reg
 import settings
+from update import check_version
+import about
 
 
 def menu_controls(value, cv):
@@ -54,9 +57,33 @@ def main_window(window=0, top=None):
 
 
 def menu_bar(cv, cv2):
-    menu = maliang.SegmentedButton(cv, (0, 0), text=("定时关机               ", "Windows 工具      ", "修改任务栏            ", "更新    "), layout="vertical", default=0, command=lambda i:menu_controls(menu.get(), cv2))
+    menu = maliang.SegmentedButton(cv, (0, 0), text=("定时关机               ", "Windows 工具      ", "修改任务栏            ", "系统信息               "), layout="vertical", default=0, command=lambda i:menu_controls(menu.get(), cv2))
+    about_button = maliang.Button(cv, (0, 400), text="            关于            ", command=lambda: About(cv2))
 
 
+def About(cv):
+    logger.info("关于界面")
+    cv.clear()
+
+    cv.place(width=650, height=450, x=200, y=40)
+    animation.MoveTkWidget(cv, (0, -40), 200, fps=60).start(delay=50)
+    
+    # EECT_logo = maliang.Image(cv, (20, 15), image=maliang.PhotoImage(file="./EECT_icon.png").resize(60, 60))
+    About_title = maliang.Text(cv, (20, 20), text="EECT", fontsize=40)
+    About_text = maliang.Text(cv, (20, 100), text=f"Version：{check_version(1)}\nVersion code：{check_version(0)}")
+    update = maliang.Button(cv, (20, 165), text="检查更新", command=about.pull_up_the_update)
+    # EECT__update = maliang.Button(cv, (20, 225), text="启动“EECT更新组件”", command=update_exe)
+
+    About_sidebar_text = maliang.Text(cv, (400, 20), text="更多信息∨", fontsize=20)
+    List_of_developers = maliang.UnderlineButton(cv, (400, 70), text="贡献者名单", fontsize=16, command=lambda: webbrowser.open_new("https://github.com/EECT/EECT/graphs/contributors"))
+    thanks = maliang.UnderlineButton(cv, (400, 100), text="鸣谢", fontsize=16, command=lambda: about.thanks(About))
+    go_github = maliang.UnderlineButton(cv, (400, 130), text="前往此项目仓库", fontsize=16, command=lambda: webbrowser.open_new("https://github.com/EECT/EECT"))
+    issues = maliang.UnderlineButton(cv, (400, 160), text="意见反馈", fontsize=16, command=lambda: webbrowser.open_new("https://github.com/EECT/EECT/issues"))
+    open_source_license = maliang.UnderlineButton(cv, (400, 190), text="开放源代码许可", fontsize=16, command=lambda: about.open_source_license(About))
+    free_software_statement = maliang.UnderlineButton(cv, (400, 220), text="免费软件声明", fontsize=16, command=lambda: about.free_software_statement(About))
+    c = maliang.Label(cv, (20, 410), text="Copyright © 2025 EECT Team, All Rights Reserved.", fontsize=12)
+    
+    
 def auto_shutdown(cv):
     logger.info("自动关机")
     cv.clear()
