@@ -3,7 +3,7 @@ ExperienceTheFeatures = false
 UseRegistry = true
 
 [appearance]
-color_mode = 2
+color_mode = 0
 
 [storage]
 cache = true
