@@ -6,7 +6,6 @@ import random
 import tomllib
 import webbrowser
 
-import update_settingsGUI
 import shutdown
 import reg
 import settings
@@ -14,6 +13,7 @@ import settingsGUI
 from update import check_version
 import about
 import dialog
+import core
 
 
 def menu_controls(value, cv):
@@ -25,7 +25,7 @@ def menu_controls(value, cv):
         case 2:
             taskbar(cv)
         case 3:
-            update_settingsGUI.settings_main(cv)
+            system_info(cv)
 
 
 def main_window():
@@ -37,7 +37,7 @@ def main_window():
     menu_cv = maliang.Canvas(root, auto_zoom=False)
     menu_cv.place(width=200, height=450)
     root_cv.place(width=650, height=450, x=200)
-    root.title("EECT")
+    root.title(f"EECT    -{core.名人名言()}-")
     root.resizable(False, False)
     menu_bar(menu_cv, root_cv, root)
     auto_shutdown(root_cv)
@@ -132,6 +132,21 @@ def taskbar(cv):
     tips = maliang.Label(cv, (10, 250), text="带`的功能有点问题，请谨慎使用。", fontsize=14)
 
     restart_explorer = maliang.Button(cv, (10, 300), text='重启资源管理器', command=lambda: os.system("taskkill /f /im explorer.exe & start explorer.exe"))
+
+
+def system_info(cv):
+    logger.info("系统信息")
+    cv.clear()
+    wait = maliang.Label(cv, (20, 20), text="正在获取信息……")
+
+    cv.place(width=650, height=450, x=200, y=40)
+    animation.MoveTkWidget(cv, (0, -40), 200, fps=60).start(delay=50)
+
+    wait.destroy()
+    system = maliang.Text(cv, (20, 20), text=f"操作系统: {core.system_basic_information()[0]}\n版本: {core.system_basic_information()[1]}\n架构: {core.system_basic_information()[2]}", fontsize=16)
+    cpu = maliang.Text(cv, (20, 100), text=f"CPU: {core.cpu_info()[0]}\n        {core.cpu_info()[1]}核{core.cpu_info()[2]}线程", fontsize=16)
+    RAM = maliang.Text(cv, (20, 160), text=f"运行内存: {core.RAM_info():.1f}GB", fontsize=16)
+    display = maliang.Text(cv, (20, 200), text=f"当前使用分辨率: {core.display_info()}", fontsize=16)
 
 
 if __name__ == "__main__":

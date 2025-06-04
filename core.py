@@ -4,6 +4,7 @@ import traceback
 import platform
 import wmi
 import ctypes
+import random
 
 logger.info("加载EECT核心必要模块")
 import GUI
@@ -70,7 +71,7 @@ def cpu_info():
 def RAM_info():
     c = wmi.WMI()
     os_mem = c.Win32_OperatingSystem()[0]
-    memory_size = int(os_mem.TotalVisibleMemorySize) / 1024 / 1024  # 总内存大小
+    memory_size = int(os_mem.TotalVisibleMemorySize) / 1024 / 1024    # 总内存大小
 
     return memory_size    # 返回 总内存大小（GB）
 
@@ -81,3 +82,12 @@ def display_info():
     height = user32.GetSystemMetrics(1)  # 获取屏幕高度
 
     return f"{width}x{height}"    # 返回当前使用的屏幕分辨率（宽x高）
+
+
+# 名人名言
+def 名人名言():    # 欸我去，def居然惊现中文字符😱！！！
+    id = random.randint(1, 10)
+    with open("./config/FamousQuotes.toml", 'rb') as f:
+        famous_quotes = tomllib.load(f)
+    text = famous_quotes[str(id)]
+    return text
