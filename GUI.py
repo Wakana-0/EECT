@@ -37,11 +37,15 @@ def main_window():
     menu_cv = maliang.Canvas(root, auto_zoom=False)
     menu_cv.place(width=200, height=450)
     root_cv.place(width=650, height=450, x=200)
-    root.title(f"EECT    -{core.名人名言()}-")
+    root.title("EECT")
+    if settings.get_experimental_TitleBarFamousQuotes():
+        root.title(f"EECT    -{core.名人名言()}-")
+
     root.resizable(False, False)
     menu_bar(menu_cv, root_cv, root)
     auto_shutdown(root_cv)
-    dialog.tips(root, "Tips!", "Beta版本提醒", "当前正在使用的EECT是测试版，程序稳定性和功能完整性\n欠缺，不建议将此版本当作正式版使用。")
+    if not settings.get_value("experimental.NoBetaWarner"):
+        dialog.tips(root, "Tips!", "Beta版本提醒", "当前正在使用的EECT是测试版，程序稳定性和功能完整性\n欠缺，不建议将此版本当作正式版使用。")
     root.mainloop()
 
 
@@ -84,8 +88,6 @@ def auto_shutdown(cv):
     # 创建文本框和按钮
     shutdown_time_entry = maliang.InputBox(cv, (50, 20), (90, 40))
     shutdown_time_entry.insert(0, '60')  # 默认值为60秒
-
-    maliang.Label(cv, (0, 0), text="标记点")
 
     shutdown_button = maliang.Button(cv, (150, 20), text='在设定的时间后关机', command=lambda: shutdown.set_shutdown_time(shutdown_time_entry))
 
@@ -143,7 +145,7 @@ def system_info(cv):
     animation.MoveTkWidget(cv, (0, -40), 200, fps=60).start(delay=50)
 
     wait.destroy()
-    system = maliang.Text(cv, (20, 20), text=f"操作系统: {core.system_basic_information()[0]}\n版本: {core.system_basic_information()[1]}\n架构: {core.system_basic_information()[2]}", fontsize=16)
+    system = maliang.Text(cv, (20, 20), text=f"操作系统: {core.system_basic_information()[0]}\n版本: {core.system_basic_information()[1]}\n系统类型: {core.system_basic_information()[2]}", fontsize=16)
     cpu = maliang.Text(cv, (20, 100), text=f"CPU: {core.cpu_info()[0]}\n        {core.cpu_info()[1]}核{core.cpu_info()[2]}线程", fontsize=16)
     RAM = maliang.Text(cv, (20, 160), text=f"运行内存: {core.RAM_info():.1f}GB", fontsize=16)
     display = maliang.Text(cv, (20, 200), text=f"当前使用分辨率: {core.display_info()}", fontsize=16)

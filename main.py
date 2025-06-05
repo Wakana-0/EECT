@@ -52,6 +52,13 @@ if core.version() < 1:
     err.show_error(f"核心版本过低，应用程序不支持此核心，请 更新 或 下载最新版本 的EECT解决此问题。\n核心版本: {core.version()}\n应用程序支持的最低版本: 1\n\n操作建议：更新或下载最新版本的EECT、关闭程序。", 1)
     exit(0)
 
+logger.info("检查主程序是否满足核心最低版本要求")
+if not core.version_verification(version):
+    logger.error(f"主程序版本过低，不满足核心最低要求，无法继续运行。当前主程序版本: {version}")
+    err.show_error(f"主程序版本过低，主程序不支持此核心，请 下载最新版本 的EECT解决此问题。\n主程序版本: {version}\n\n操作建议：下载最新版本的EECT、关闭程序。", 1)
+    exit(1)
+
+
 logger.info("core")
 core.mian()
 

@@ -48,6 +48,10 @@ def load_config():
             "senior": {
                 "ExperienceTheFeatures": False,
                 "UseRegistry": True
+            },
+            "experimental": {
+                "TitleBarFamousQuotes": False,
+                "NoBetaWarner": True
             }
         }
 
@@ -134,8 +138,14 @@ def set_value(key_path, value):
             current = current[k]
 
         # 设置值
+        if value == "True":
+            value = "true"
+        elif value == "False":
+            value = "false"
+
         current[keys[-1]] = value
         logger.info(f"设置配置值: {key_path} = {value}")
+        save_config()
     except (KeyError, TypeError) as e:
         logger.error(f"设置配置值失败: {e}")
         raise KeyError(f"键路径 '{key_path}' 无效")
@@ -199,6 +209,10 @@ def get_color_mode():
     mode = color_modes[str(mode)]
     return mode
 
+
+def get_experimental_TitleBarFamousQuotes():
+    """获取实验性功能设置"""
+    return get_value("experimental.TitleBarFamousQuotes")
 
 
 def set_use_registry(value):

@@ -15,6 +15,13 @@ def version():
     return 1
 
 
+def version_verification(version):
+    if version < 1:
+        return False
+    else:
+        return True
+
+
 def mian():
     read_config()
     GUI.main_window()
@@ -84,7 +91,8 @@ def display_info():
     return f"{width}x{height}"    # 返回当前使用的屏幕分辨率（宽x高）
 
 
-# 名人名言
+# -----名人名言-----
+
 def 名人名言():    # 欸我去，def居然惊现中文字符😱！！！
     id = random.randint(1, 10)
     with open("./config/FamousQuotes.toml", 'rb') as f:
