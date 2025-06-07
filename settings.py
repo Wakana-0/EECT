@@ -246,6 +246,30 @@ def set_color_mode(mode):
     save_config()
 
 
+def set_color_mode(mode):
+    """
+    设置颜色模式
+    :param mode: 0-系统, 1-深色, 2-浅色
+    """
+    color_modes = {"0": "system", "1": "dark", "2": "light"}
+    theme.set_color_mode(color_modes[str(mode)])
+    logger.info(f"切换主题至{color_modes[str(mode)]}")
+
+    if str(mode) not in color_modes:
+        raise ValueError("无效的颜色模式")
+
+    # 确保 appearance 部分存在
+    config = get_config()
+    if "appearance" not in config:
+        config["appearance"] = {}
+
+    config["appearance"]["color_mode"] = mode
+    _config = config  # 更新全局配置
+
+    # 保存配置
+    save_config()
+
+
 # 初始化加载配置
 load_config()
 

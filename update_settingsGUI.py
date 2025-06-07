@@ -3,6 +3,7 @@ from maliang import theme, animation
 from loguru import logger
 
 import update_settings
+import settings
 
 config = None
 download_source = int(update_settings.get_config()[0])
@@ -37,4 +38,3 @@ def settings_main(cv):
     download_source_choose_text = maliang.Text(cv, (20, 200), text="下载源选择（如果无法下载更新，请切换下载源）")
     download_source_choose = maliang.OptionButton(cv, (20, 240), text=("Github", "Proxy"), default=download_source)
 
-    # animation.MoveWidget(save, (265*2, 0), 1200, fps=90, controller=animation.ease_out).start(delay=100)

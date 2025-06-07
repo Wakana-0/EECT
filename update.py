@@ -16,7 +16,8 @@ def get_update_config():
         url = update_config['url']
         beta_url = update_config['beta_url']
         update_channel = update_config['update_channel']
-    return url, beta_url, update_channel
+        downloader_source = update_config['downloader_source']
+    return url, beta_url, update_channel, downloader_source
 
 
 # 检查更新
