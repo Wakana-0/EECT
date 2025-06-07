@@ -1,4 +1,4 @@
 url = "https://raw.bgithub.xyz/EECT/EECT_update/refs/heads/main/update.toml"
 beta_url = "https://raw.bgithub.xyz/EECT/EECT_update/refs/heads/main/update-beta.toml"
-download_source = "0"    # 0: github, 1: proxy
-update_channel = "0"    # 0: 正式版, 1: 测试版
+download_source = "1"
+update_channel = "0"

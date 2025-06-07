@@ -9,6 +9,7 @@ import settingsGUI
 # 全局配置变量
 _config = None
 _config_path = './config/config.toml'
+_update_path = './config/update_config.toml'
 
 
 def _ensure_config_dir():
@@ -246,25 +247,19 @@ def set_color_mode(mode):
     save_config()
 
 
-def set_color_mode(mode):
+def set_download_source(mode):
     """
-    设置颜色模式
-    :param mode: 0-系统, 1-深色, 2-浅色
+    设置颜下载源
+    :param mode: 0-github, 1-bgithub
     """
-    color_modes = {"0": "system", "1": "dark", "2": "light"}
-    theme.set_color_mode(color_modes[str(mode)])
-    logger.info(f"切换主题至{color_modes[str(mode)]}")
+    source = {"0": "github", "1": "bgithub"}
+    theme.set_color_mode(source[str(mode)])
+    logger.info(f"切换下载源至{source[str(mode)]}")
 
-    if str(mode) not in color_modes:
-        raise ValueError("无效的颜色模式")
+    if str(mode) not in source:
+        raise ValueError("无效的颜下载源")
 
-    # 确保 appearance 部分存在
-    config = get_config()
-    if "appearance" not in config:
-        config["appearance"] = {}
-
-    config["appearance"]["color_mode"] = mode
-    _config = config  # 更新全局配置
+    set_value("download_source", f"{mode}")
 
     # 保存配置
     save_config()
