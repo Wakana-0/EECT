@@ -1,4 +1,4 @@
 url = "https://raw.bgithub.xyz/EECT/EECT_update/refs/heads/main/update.toml"
 beta_url = "https://raw.bgithub.xyz/EECT/EECT_update/refs/heads/main/update-beta.toml"
-download_source = "1"
+download_source = "0"
 update_channel = "0"

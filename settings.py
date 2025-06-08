@@ -257,7 +257,7 @@ def set_download_source(mode):
     logger.info(f"切换下载源至{source[str(mode)]}")
 
     if str(mode) not in source:
-        raise ValueError("无效的颜下载源")
+        raise ValueError("无效的下载源")
 
     set_value("download_source", f"{mode}")
 

@@ -1,6 +1,8 @@
 import maliang
 from maliang import animation
 from loguru import logger
+
+import core
 import settings
 import random
 import tomllib
@@ -89,7 +91,8 @@ def settings_storage(cv):
     cv.place(width=650, height=450, x=100, y=40)
     animation.MoveTkWidget(cv, (0, -40), 200, fps=60).start(delay=50)
 
-    title = maliang.Text(cv, (20, 20), text="存储设置（演示界面）", fontsize=26)
+    title = maliang.Text(cv, (20, 20), text="存储设置", fontsize=26)
+    del_logs = maliang.Button(cv, (20,70), text="删除日志", command=core.delete_logs)
 
 
 def settings_experimental(cv):

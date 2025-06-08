@@ -19,4 +19,4 @@ UseRegistry = true
 
 [experimental]
 TitleBarFamousQuotes = false
-NoBetaWarner = false
+NoBetaWarner = true

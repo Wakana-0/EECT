@@ -1,5 +1,6 @@
 # https://github.com/EECT/EECT
 import maliang
+import win10toast
 from maliang import theme
 from tkinter import messagebox
 import os
@@ -12,10 +13,11 @@ import psutil
 import tomli_w
 from packaging import version
 import wmi
+from win10toast import ToastNotifier
 
+import update
 
 version = 1
-
 
 # 创建logs目录，如果不存在
 log_dir = 'logs'
@@ -57,6 +59,35 @@ if not core.version_verification(version):
     logger.error(f"主程序版本过低，不满足核心最低要求，无法继续运行。当前主程序版本: {version}")
     err.show_error(f"主程序版本过低，主程序不支持此核心，请 下载最新版本 的EECT解决此问题。\n主程序版本: {version}\n\n操作建议：下载最新版本的EECT、关闭程序。", 1)
     exit(1)
+
+
+# 检查更新
+try:
+    ud_info = update.update()
+    if ud_info[0]:
+        # 初始化通知对象
+        toaster = win10toast.ToastNotifier()
+
+        # 发送基础通知
+        toaster.show_toast(
+            title="EECT更新",
+            msg=f"当前使用的EECT不是最新的。\n最新版本：{ud_info[1]}，当前版本：{update.check_version(1)}\n\n转到“关于”了解详细信息。",
+            duration=10,  # 显示时长（秒）
+            threaded=True,  # 启用后台线程
+            icon_path="./img/EECT_logo.ico"
+        )
+except Exception as e:
+    # 初始化通知对象
+    toaster = win10toast.ToastNotifier()
+
+    # 发送基础通知
+    toaster.show_toast(
+        title="EECT更新 - 更新检查失败",
+        msg=f"{e}",
+        duration=10,  # 显示时长（秒）
+        threaded=True,  # 启用后台线程
+        icon_path="./img/EECT_logo.ico"
+    )
 
 
 logger.info("core")

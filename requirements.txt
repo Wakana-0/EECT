@@ -9,3 +9,4 @@ win32material==1.0.7
 loguru==0.7.3
 tomli-w==1.2.0
 wmi==1.5.1
+win10toast==0.9
