@@ -64,8 +64,8 @@ def About(cv):
     
     # EECT_logo = maliang.Image(cv, (20, 15), image=maliang.PhotoImage(file="./EECT_icon.png").resize(60, 60))
     About_title = maliang.Text(cv, (20, 20), text="EECT", fontsize=40)
-    About_text = maliang.Text(cv, (20, 100), text=f"Version：{check_version(1)}\nVersion code：{check_version(0)}")
-    update = maliang.Button(cv, (20, 165), text="检查更新", command=about.pull_up_the_update)
+    About_text = maliang.Text(cv, (20, 100), text=f"Version: {check_version(1)}\nVersion code: {check_version(0)}\nCore: {core.version()} (Build: {core.build_version()})")
+    update = maliang.Button(cv, (20, 195), text="检查更新", command=about.pull_up_the_update)
     # EECT__update = maliang.Button(cv, (20, 225), text="启动“EECT更新组件”", command=update_exe)
 
     About_sidebar_text = maliang.Text(cv, (400, 20), text="更多信息∨", fontsize=20)
