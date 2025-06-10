@@ -9,6 +9,7 @@ import ctypes
 import random
 import shutil
 from tkinter import messagebox
+import sys
 
 logger.info("加载EECT核心必要模块")
 import GUI
@@ -79,10 +80,10 @@ def delete_logs():
         messagebox.showwarning("需要重新启动应用程序", "日志删除完成，需要重新启动程序。\n\n点击“确定”重新启动程序。")
         try:
             os.startfile("EECT.exe")
-            exit(0)
+            sys.exit(0)
         except FileNotFoundError:
             os.startfile("main.py")
-            exit(0)
+            sys.exit(0)
     except Exception:
         messagebox.showerror("错误", f"日志删除失败。\n\n{traceback.format_exc()}")
         logger.error(f"日志删除失败：{traceback.format_exc()}")

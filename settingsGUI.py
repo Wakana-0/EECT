@@ -1,4 +1,6 @@
 import maliang
+import tkinter as tk
+from tkinter import ttk
 from maliang import animation
 from loguru import logger
 
@@ -108,3 +110,75 @@ def settings_experimental(cv):
 
     no_beta_warner = maliang.Switch(cv, (20, 130), default=settings.get_value("experimental.NoBetaWarner"), command=lambda i: settings.set_value("experimental.NoBetaWarner", no_beta_warner.get()))
     maliang.Text(cv, (100, 130), text="关闭测试版提醒弹窗")
+
+    config_file_info = maliang.Button(cv, (20, 280), text="配置文件", command=config_file)
+
+
+def config_file():
+    root = maliang.Tk(size=(700, 450))
+    root.title("配置文件查看器")
+    root.resizable(False, False)
+
+    # 创建一个框架来包含Treeview和滚动条
+    frame = tk.Frame(root)
+    frame.place(x=10, y=10, width=680, height=430)
+
+    # 创建Treeview控件
+    tree = ttk.Treeview(frame, columns=(), show="tree")
+    tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+    # 创建垂直滚动条
+    scrollbar = ttk.Scrollbar(frame, orient=tk.VERTICAL, command=tree.yview)
+    scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+    # 配置Treeview与滚动条的关联
+    tree.configure(yscrollcommand=scrollbar.set)
+
+    # 添加配置节到树
+    def add_section_items(parent_node, section_name, values):
+        # 如果是配置节(字典)，则添加section节点
+        if isinstance(values, dict):
+            section_node = tree.insert(parent_node, tk.END, text=section_name)
+            # 添加键值对到section节点
+            for key, value in values.items():
+                key_value_text = f"{key} | {value}"
+                tree.insert(section_node, tk.END, text=key_value_text)
+        else:  # 如果是顶级键值对
+            key_value_text = f"{section_name} | {values}"
+            tree.insert(parent_node, tk.END, text=key_value_text)
+
+    # 添加整个配置文件到树
+    def add_config_to_tree(parent_node, config_data, file_name):
+        # 添加table节点
+        table_node = tree.insert(parent_node, tk.END, text="table")
+
+        # 添加各个配置节到table节点
+        if isinstance(config_data, dict):
+            for section, values in config_data.items():
+                add_section_items(table_node, section, values)
+
+    tips = tree.insert("", tk.END, text="“配置文件查看器”树状图由 tkinter.ttk 强力驱动。            Version: 1.0")
+
+    # 添加主配置文件内容
+    try:
+        with open('./config/config.toml', 'rb') as f:
+            config1 = tomllib.load(f)
+
+        # 添加主配置文件到树
+        file_node = tree.insert("", tk.END, text="config.toml")
+        add_config_to_tree(file_node, config1, "config.toml")
+    except Exception as e:
+        error_node = tree.insert("", tk.END, text=f"主配置文件 (config.toml) - 读取错误: {str(e)}")
+
+    # 添加更新配置文件内容
+    try:
+        with open('./config/update_config.toml', 'rb') as f:
+            config2 = tomllib.load(f)
+
+        # 添加更新配置文件到树
+        file_node = tree.insert("", tk.END, text="update_config.toml")
+        add_config_to_tree(file_node, config2, "update_config.toml")
+    except Exception as e:
+        error_node = tree.insert("", tk.END, text=f"更新配置文件 (update_config.toml) - 读取错误: {str(e)}")
+
+    root.mainloop()

@@ -74,7 +74,7 @@ def About(cv):
     go_github = maliang.UnderlineButton(cv, (400, 130), text="前往此项目仓库", fontsize=16, command=lambda: webbrowser.open_new("https://github.com/EECT/EECT"))
     issues = maliang.UnderlineButton(cv, (400, 160), text="意见反馈", fontsize=16, command=lambda: webbrowser.open_new("https://github.com/EECT/EECT/issues"))
     open_source_license = maliang.UnderlineButton(cv, (400, 190), text="开放源代码许可", fontsize=16, command=lambda: about.open_source_license(About))
-    free_software_statement = maliang.UnderlineButton(cv, (400, 220), text="免费软件声明", fontsize=16, command=lambda: about.free_software_statement(About))
+    maliang.UnderlineButton(cv, (400, 220), text="配置文件查看器", fontsize=16, command=settingsGUI.config_file)
     c = maliang.Label(cv, (20, 410), text="Copyright © 2025 EECT Team, All Rights Reserved.", fontsize=12)
     
     
