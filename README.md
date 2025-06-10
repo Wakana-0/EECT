@@ -30,6 +30,7 @@
 
 
 ## 鸣谢
+EECT离不开以下开源项目的支持：
  - [maliang](https://github.com/Xiaokang2022/maliang)
    - [darkdetect](https://github.com/albertosottile/darkdetect)
    - [pillow](https://github.com/python-pillow/Pillow)
