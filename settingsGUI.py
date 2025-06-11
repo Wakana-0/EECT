@@ -1,6 +1,6 @@
 import maliang
-import tkinter as tk
-from tkinter import ttk
+# import tkinter as tk
+# from tkinter import ttk
 from maliang import animation
 from loguru import logger
 
@@ -111,9 +111,10 @@ def settings_experimental(cv):
     no_beta_warner = maliang.Switch(cv, (20, 130), default=settings.get_value("experimental.NoBetaWarner"), command=lambda i: settings.set_value("experimental.NoBetaWarner", no_beta_warner.get()))
     maliang.Text(cv, (100, 130), text="关闭测试版提醒弹窗")
 
-    config_file_info = maliang.Button(cv, (20, 280), text="配置文件", command=config_file)
+    # config_file_info = maliang.Button(cv, (20, 280), text="配置文件", command=config_file)
 
 
+"""
 def config_file():
     root = maliang.Tk(size=(700, 450))
     root.title("配置文件查看器")
@@ -182,3 +183,4 @@ def config_file():
         error_node = tree.insert("", tk.END, text=f"更新配置文件 (update_config.toml) - 读取错误: {str(e)}")
 
     root.mainloop()
+    """

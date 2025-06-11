@@ -16,7 +16,7 @@ import GUI
 import err
 
 _logs_path = "./logs"
-build = 250610.1
+build = 250611.1
 
 
 def version():
