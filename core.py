@@ -13,6 +13,7 @@ import sys
 
 logger.info("加载EECT核心必要模块")
 import GUI
+import corelib
 import err
 
 _logs_path = "./logs"
