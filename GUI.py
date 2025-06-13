@@ -69,11 +69,13 @@ def About(cv):
     # EECT__update = maliang.Button(cv, (20, 225), text="启动“EECT更新组件”", command=update_exe)
 
     About_sidebar_text = maliang.Text(cv, (400, 20), text="更多信息∨", fontsize=20)
-    List_of_developers = maliang.UnderlineButton(cv, (400, 70), text="贡献者名单", fontsize=16, command=lambda: webbrowser.open_new("https://github.com/EECT/EECT/graphs/contributors"))
-    thanks = maliang.UnderlineButton(cv, (400, 100), text="鸣谢", fontsize=16, command=lambda: about.thanks(About))
-    go_github = maliang.UnderlineButton(cv, (400, 130), text="前往此项目仓库", fontsize=16, command=lambda: webbrowser.open_new("https://github.com/EECT/EECT"))
-    issues = maliang.UnderlineButton(cv, (400, 160), text="意见反馈", fontsize=16, command=lambda: webbrowser.open_new("https://github.com/EECT/EECT/issues"))
-    open_source_license = maliang.UnderlineButton(cv, (400, 190), text="开放源代码许可", fontsize=16, command=lambda: about.open_source_license(About))
+    List_of_developers = maliang.UnderlineButton(cv, (400, 70), text="贡献者名单", fontsize=16, command=lambda: webbrowser.open_new("https://bgithub.xyz/EECT/EECT/graphs/contributors"))
+    thanks = maliang.UnderlineButton(cv, (400, 100), text="鸣谢", fontsize=16, command=lambda: webbrowser.open_new("https://bgithub.xyz/EECT/EECT?tab=readme-ov-file#%E9%B8%A3%E8%B0%A2"))
+    go_github = maliang.UnderlineButton(cv, (400, 130), text="前往此项目仓库", fontsize=16, command=lambda: webbrowser.open_new("https://bgithub.xyz/EECT/EECT"))
+    issues = maliang.UnderlineButton(cv, (400, 160), text="意见反馈", fontsize=16, command=lambda: webbrowser.open_new("https://bgithub.xyz/EECT/EECT/issues"))
+
+    open_source_license = maliang.UnderlineButton(cv, (400, 190), text="开放源代码许可", fontsize=16, command=lambda: webbrowser.open_new("https://bgithub.xyz/EECT/EECT/blob/main/LICENSE"))
+
     # maliang.UnderlineButton(cv, (400, 220), text="配置文件查看器", fontsize=16, command=settingsGUI.config_file)
     c = maliang.Label(cv, (20, 410), text="Copyright © 2025 EECT Team, All Rights Reserved.", fontsize=12)
     
