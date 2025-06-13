@@ -17,7 +17,7 @@ import corelib
 import err
 
 _logs_path = "./logs"
-build = 250611.1
+build = 250613.1
 
 
 def version():
