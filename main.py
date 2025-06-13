@@ -36,13 +36,6 @@ logger.add(log_file_path, level='DEBUG', format='{time:YYYY-MM-DD HH:mm:ss} | {l
 logger.info("EECT启动")
 
 
-def update_exe():
-    try:
-        os.startfile(".\\EECT-Update.exe")
-    except FileNotFoundError:
-        messagebox.showerror("组件错误", "无法打开“EECT更新组件”。\n此EECT没有附带“EECT更新组件” (EECT-Update.exe)。")
-
-
 logger.info("导入核心模块")
 import core
 logger.info("导入基本模块")
