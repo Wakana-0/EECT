@@ -1,6 +1,6 @@
 import maliang
-# import tkinter as tk
-# from tkinter import ttk
+import tkinter as tk
+from tkinter import ttk
 from maliang import animation
 from loguru import logger
 
