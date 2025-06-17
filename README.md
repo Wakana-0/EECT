@@ -1,5 +1,8 @@
 <p><a target="_blank" href="https://app.eraser.io/workspace/JLMQfONupwbjFZZOMGp1" id="edit-in-eraser-github-link"><img alt="Edit in Eraser" src="https://firebasestorage.googleapis.com/v0/b/second-petal-295822.appspot.com/o/images%2Fgithub%2FOpen%20in%20Eraser.svg?alt=media&amp;token=968381c8-a7e7-472a-8ed6-4a6626da5501"></a></p>
 
+> [!WARNING]  
+**开发暂缓通知：** ⚠因临近期末考试，EECT的开发暂时暂停，不过仍接受新功能建议和Bug反馈。
+
 #  Electrical Education Commission Toolbox 电教工具箱 
  简洁、易用的电教委工具。 
 
@@ -7,7 +10,7 @@
 
 
 ## 使用文档
->  WARNING
+> [!WARNING]  
 **注意：** 使用文档目前处于烂尾状态 
 
 [﻿转到使用文档（Wiki）](https://github.com/EECT/EECT/wiki) 
@@ -16,7 +19,7 @@
 #### 确认系统需求
 首先，确认您的设备是否满足以下需求:
 
->  NOTE
+>  [!NOTE]
 **兼容性：** 支持 Windows 10，对 Windows 8的兼容性需要验证。 
 
 要求配置
