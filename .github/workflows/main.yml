@@ -58,6 +58,7 @@ jobs:
         output-file: EECT
         onefile: false
         standalone: true
+        run: true
         windows-icon-from-ico: EECT_icon.ico
         include-data-dir: |
           img=img
