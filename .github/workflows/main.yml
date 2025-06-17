@@ -58,13 +58,13 @@ jobs:
         output-file: EECT
         onefile: false
         standalone: true
-        run: true
         windows-icon-from-ico: EECT_icon.ico
         include-data-dir: |
           img=img
           config=config
         enable-plugins: tk-inter
         windows-console-mode: attach
+        trace-execution: true
         nofollow-import-to: core, GUI, about, FindGames, err, shutdown, reg, settings, dialog, settingsGUI, update, update_settingsGUI, update_settings
         product-name: EECT
         product-version: 1
