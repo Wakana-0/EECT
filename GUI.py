@@ -15,6 +15,13 @@ import about
 import dialog
 import core
 
+try:
+    import corelib
+    Language = corelib.Language()
+
+except Exception:
+    pass
+
 
 def menu_controls(value, cv):
     match value:
