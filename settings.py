@@ -9,6 +9,7 @@ import settingsGUI
 # 全局配置变量
 _config = None
 _config_path = './config/config.toml'
+_update_path = './config/update_config.toml'
 
 
 def _ensure_config_dir():
@@ -48,6 +49,10 @@ def load_config():
             "senior": {
                 "ExperienceTheFeatures": False,
                 "UseRegistry": True
+            },
+            "experimental": {
+                "TitleBarFamousQuotes": False,
+                "NoBetaWarner": True
             }
         }
 
@@ -134,8 +139,14 @@ def set_value(key_path, value):
             current = current[k]
 
         # 设置值
+        if value == "True":
+            value = "true"
+        elif value == "False":
+            value = "false"
+
         current[keys[-1]] = value
         logger.info(f"设置配置值: {key_path} = {value}")
+        save_config()
     except (KeyError, TypeError) as e:
         logger.error(f"设置配置值失败: {e}")
         raise KeyError(f"键路径 '{key_path}' 无效")
@@ -187,6 +198,24 @@ def get_use_registry():
     return get_value("UseRegistry")
 
 
+def get_color_mode():
+    """
+    获取颜色模式
+    返回: 0-系统, 1-深色, 2-浅色
+    """
+    color_modes = {"0": "system", "1": "dark", "2": "light"}
+    mode = get_value("appearance.color_mode")
+    if str(mode) not in color_modes:
+        raise ValueError("无效的颜色模式")
+    mode = color_modes[str(mode)]
+    return mode
+
+
+def get_experimental_TitleBarFamousQuotes():
+    """获取实验性功能设置"""
+    return get_value("experimental.TitleBarFamousQuotes")
+
+
 def set_use_registry(value):
     """设置注册表功能设置"""
     set_value("UseRegistry", value)
@@ -213,6 +242,24 @@ def set_color_mode(mode):
 
     config["appearance"]["color_mode"] = mode
     _config = config  # 更新全局配置
+
+    # 保存配置
+    save_config()
+
+
+def set_download_source(mode):
+    """
+    设置颜下载源
+    :param mode: 0-github, 1-bgithub
+    """
+    source = {"0": "github", "1": "bgithub"}
+    theme.set_color_mode(source[str(mode)])
+    logger.info(f"切换下载源至{source[str(mode)]}")
+
+    if str(mode) not in source:
+        raise ValueError("无效的下载源")
+
+    set_value("download_source", f"{mode}")
 
     # 保存配置
     save_config()

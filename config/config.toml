@@ -16,3 +16,7 @@ update_channel = "0"
 [senior]
 ExperienceTheFeatures = false
 UseRegistry = true
+
+[experimental]
+TitleBarFamousQuotes = false
+NoBetaWarner = true
